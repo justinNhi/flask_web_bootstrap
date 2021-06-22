@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Thêm Xe Mới</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='icon/volang.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-theme.css') }}">
+</head>
+<body>
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item " aria-current="page"><a href="{{ url_for('list_xe') }}">Danh sách xe</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Thêm xe mới</li>
+        </ol>
+    </nav>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">First</th>
+            <th scope="col">Last</th>
+            <th scope="col">Handle</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th scope="row">1</th>
+            <td>Mark</td>
+            <td>Otto</td>
+            <td>@mdo</td>
+        </tr>
+        <tr>
+            <th scope="row">2</th>
+            <td>Jacob</td>
+            <td>Thornton</td>
+            <td>@fat</td>
+        </tr>
+        <tr>
+            <th scope="row">3</th>
+            <td>Larry</td>
+            <td>the Bird</td>
+            <td>@twitter</td>
+        </tr>
+        </tbody>
+        <tfoot>
+            <td scope="row"></td>
+            <td></td>
+            <td></td>
+            <td>
+                <a href="{{ url_for('them_xe') }}" class="glyphicon glyphicon-plus"></a>
+{#                <form action="{{ url_for('them_xe') }}" method="post">#}
+{#                    <button type="submit" class="glyphicon glyphicon-plus"></button>#}
+{#                </form>#}
+            </td>
+        </tfoot>
+
+</table>
+</div>
+
+
+
+</body>
+</html>

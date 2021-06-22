@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Quản Lý Xe</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='icon/volang.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-theme.css') }}">
+</head>
+<body>
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page">Danh sách xe</li>
+{#            <li class="breadcrumb-item " aria-current="page">Thêm xe</li>#}
+        </ol>
+    </nav>
+
+    <table  class="table table-hover table-sm table-responsive">
+        <thead>
+        <tr>
+            <th scope="col">Ngày nhập</th>
+            <th scope="col">Mã Xe</th>
+            <th scope="col">Tên Xe</th>
+            <th scope="col">Hãng Xe</th>
+            <th scope="col">Chi tiết xe</th>
+        </tr>
+        </thead>
+        <tbody id="myTable">
+        <tr>
+            <th scope="row">21/12/2021</th>
+            <td>X0001</td>
+            <td>Altis</td>
+            <td>TOYOTA</td>
+            <td>Đã bán</td>
+            <td>
+                <form action="{{ url_for('xe') }}" method="post">
+                    <button type="submit" class="glyphicon glyphicon-chevron-right"></button>
+                </form>
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">21/12/2021</th>
+            <td>X0001</td>
+            <td>Altis</td>
+            <td>TOYOTA</td>
+            <td>Đã bán</td>
+            <td>
+                <form action="{{ url_for('xe') }}" method="post">
+                    <button type="submit" class="glyphicon glyphicon-chevron-right"></button>
+                </form>
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">21/12/2021</th>
+            <td>X0001</td>
+            <td>Altis</td>
+            <td>TOYOTA</td>
+            <td>Đã bán</td>
+            <td>
+                <form action="{{ url_for('xe') }}" method="post">
+                    <button type="submit" class="glyphicon glyphicon-chevron-right"></button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td scope="row" colspan="5">Thêm mới xe</td>
+                <td>
+                    <a href="{{ url_for('them_xe') }}" class="glyphicon glyphicon-plus"></a>
+                </td>
+            </tr>
+        </tfoot>
+
+</table>
+</div>
+
+</body>
+</html>
