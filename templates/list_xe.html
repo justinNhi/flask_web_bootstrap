@@ -6,7 +6,10 @@
     <title>Quản Lý Xe</title>
     <link rel="shortcut icon" href="{{ url_for('static', filename='icon/volang.png') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-theme.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-grid.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-reboot.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='fa/css/all.css') }}">
+
 </head>
 <body>
 <div class="container">
@@ -16,66 +19,65 @@
 {#            <li class="breadcrumb-item " aria-current="page">Thêm xe</li>#}
         </ol>
     </nav>
-
-    <table  class="table table-hover table-sm table-responsive">
+    <div class="col-sm-3" style="float: right">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Tìm kiếm ...">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button">Go!</button>
+                </span>
+        </div><!-- /input-group -->
+    </div><!-- /.col-lg-6 -->
+    <br>
+    <table  class="table table-hover table-sm">
         <thead>
         <tr>
+            <th width="5%" scope="col">STT</th>
             <th scope="col">Ngày nhập</th>
             <th scope="col">Mã Xe</th>
             <th scope="col">Tên Xe</th>
             <th scope="col">Hãng Xe</th>
-            <th scope="col">Chi tiết xe</th>
+            <th scope="col">Trạng thái</th>
+            <th scope="col">QL giá</th>
+            <th scope="col">Chi tiết</th>
         </tr>
         </thead>
         <tbody id="myTable">
+        {% for row in data_short %}
         <tr>
-            <th scope="row">21/12/2021</th>
-            <td>X0001</td>
-            <td>Altis</td>
-            <td>TOYOTA</td>
-            <td>Đã bán</td>
+            <th scope="row">{{ loop.index }}</th>
+            <td>{{ row['PRODUCT_GET_DATE'] }}</td>
+            <td>{{ row['PRODUCT_ID_NUMBER'] }}</td>
+            <td>{{ row['PRODUCT_NAME'] }}</td>
+            <td>{{ row['PRODUCT_BRAND_NAME'] }}</td>
+            <td>{{ row['PRODUCT_STATUS'] }}</td>
             <td>
+                <form action="{{ url_for('xe_gia') }}" method="post">
+                    <input type="hidden" name="PRODUCT_ID" value="{{ row["PRODUCT_ID"] }}">
+                    <button  type="submit"><i class="fas fa-dollar-sign fa-1x"></i></button>
+                </form>
+            </td>
+            <td>
+                <input type="hidden" name="" value="{{ row["PRODUCT_ID"] }}">
                 <form action="{{ url_for('xe') }}" method="post">
-                    <button type="submit" class="glyphicon glyphicon-chevron-right"></button>
+                    <button  type="submit"><i class="fas fa-chevron-right fa-1x"></i></button>
                 </form>
             </td>
         </tr>
-        <tr>
-            <th scope="row">21/12/2021</th>
-            <td>X0001</td>
-            <td>Altis</td>
-            <td>TOYOTA</td>
-            <td>Đã bán</td>
-            <td>
-                <form action="{{ url_for('xe') }}" method="post">
-                    <button type="submit" class="glyphicon glyphicon-chevron-right"></button>
-                </form>
-            </td>
-        </tr>
-        <tr>
-            <th scope="row">21/12/2021</th>
-            <td>X0001</td>
-            <td>Altis</td>
-            <td>TOYOTA</td>
-            <td>Đã bán</td>
-            <td>
-                <form action="{{ url_for('xe') }}" method="post">
-                    <button type="submit" class="glyphicon glyphicon-chevron-right"></button>
-                </form>
-            </td>
-        </tr>
+        {% endfor %}
         </tbody>
         <tfoot>
             <tr>
-                <td scope="row" colspan="5">Thêm mới xe</td>
-                <td>
-                    <a href="{{ url_for('them_xe') }}" class="glyphicon glyphicon-plus"></a>
+                <td style="text-align: center" scope="row" colspan="6">Thêm mới</td>
+                <td colspan="2">
+                    <a style="width: 100%" href="{{ url_for('them_xe') }}"><i class="fas fa-plus fa-sm fa-2x"></i></a>
                 </td>
             </tr>
         </tfoot>
-
 </table>
 </div>
+
+<script src="{{ url_for('static', filename='js/bootstrap.bundle.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
 
 </body>
 </html>

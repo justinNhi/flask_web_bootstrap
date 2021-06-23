@@ -2,11 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+{#    <meta name="viewport" content="width=device-width, initial-scale=1">#}
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
     <title>Thêm Xe Mới</title>
     <link rel="shortcut icon" href="{{ url_for('static', filename='icon/volang.png') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-theme.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+{#    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-grid.css') }}">#}
+{#    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-reboot.css') }}">#}
+{#    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">#}
+    <link rel="stylesheet" href="{{ url_for('static', filename='fa/css/all.css') }}">
 </head>
 <body>
 <div class="container">
@@ -16,51 +22,202 @@
             <li class="breadcrumb-item active" aria-current="page">Thêm xe mới</li>
         </ol>
     </nav>
-    <table class="table">
-        <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">First</th>
-            <th scope="col">Last</th>
-            <th scope="col">Handle</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-        </tr>
-        <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-        </tr>
-        <tr>
-            <th scope="row">3</th>
-            <td>Larry</td>
-            <td>the Bird</td>
-            <td>@twitter</td>
-        </tr>
-        </tbody>
-        <tfoot>
-            <td scope="row"></td>
-            <td></td>
-            <td></td>
-            <td>
-                <a href="{{ url_for('them_xe') }}" class="glyphicon glyphicon-plus"></a>
-{#                <form action="{{ url_for('them_xe') }}" method="post">#}
-{#                    <button type="submit" class="glyphicon glyphicon-plus"></button>#}
-{#                </form>#}
-            </td>
-        </tfoot>
+    <div class="container-fluid">
+        <table width="100%" class="table">
+            <thead>
+            <tr>
+                <th style="text-align: center" width="20%">Tên</th>
+                <th style="text-align: center" width="80%">Nhập</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th style="text-align: center" scope="row"><label class="form-label">ID Xe</label></th>
+                <td><input style="width: 100%"  type="text" class="form-control" placeholder="ID" disabled></td>
+            </tr>
+            <tr>
+                <th style="text-align: center" scope="row"><label class="form-label">Mã Xe</label></th>
+                <td><input style="width: 100%"  type="text" class="form-control" placeholder="Mã xe" disabled></td>
+            </tr>
+            <tr>
+                <th style="text-align: center" scope="row"><label class="form-label">Tên Xe</label></th>
+                <td><input style="width: 100%"  type="text" class="form-control" placeholder="Tên xe" required></td>
+            </tr>
+            <tr>
+                <th style="text-align: center" scope="row"><label class="form-label">Mô tả</label></th>
+{#                <td><input style="width: 100%"  type="rich" class="form-control" placeholder="ID"></td>#}
+                <td><textarea class="form-control" placeholder="Mô tả"></textarea></td>
+            </tr>
+            <tr>
+                <th style="text-align: center" scope="row"><label class="form-label">Hãng xe</label></th>
+                <td>
+                    <div class="input-group mb-3">
+                         <select class="custom-select" id="chon-hang-xe">
+                             <option selected>Chọn thương hiệu ...</option>
+                             {% for row_brand in data_brand_model %}
+                                <option value="{{ row_brand['BRAND_ID'] }}">{{ row_brand['BRAND_NAME'] }}</option>
+                             {% endfor %}
+                         </select>
+                     </div>
+                </td>
+            </tr>
+            <tr>
+                <th style="text-align: center" scope="row"><label class="form-label">Loại xe</label></th>
+                <td>
+                    <div class="input-group mb-3">
+                         <select class="custom-select" id="chon-model-xe">
+                             <option selected>Chọn model xe ...</option>
+{#                             {% for row_model in data_brand_model[0]['MODEL'] %}#}
+{#                                <option value="{{ row_model['MODEL_ID'] }}">{{ row_brand['MODEL_NAME'] }}</option>#}
+{#                             {% endfor %}#}
+                         </select>
+                     </div>
+                </td>
+            </tr>
+            <tr>
+                <th style="text-align: center" scope="row"><label class="form-label">Mẫu xe</label></th>
+                <td>
+                    <div class="input-group mb-3">
+                         <select class="custom-select" id="inputGroupSelect01">
+                             <option selected>Chọn mẫu xe ...</option>
+                             {% for row in data_type %}
+                                 <option value="{{ row["TYPE_ID"] }}">{{ row["TYPE_NAME"] }}</option>
+                             {% endfor %}
+                         </select>
+                     </div>
+                </td>
+            </tr>
+            <tr>
+                <th style="text-align: center" scope="row"><label class="form-label">Xuất xứ</label></th>
+                <td>
+                    <div class="input-group mb-3">
+                         <select class="custom-select" id="inputGroupSelect01">
+                             <option selected>Chọn Xuất Xứ ...</option>
+                             <option value="1">Láp ráp trong nước</option>
+                             <option value="2">Nhập khẩu</option>
+                         </select>
+                     </div>
+                </td>
+            </tr>
+            <tr>
+                <th style="text-align: center" scope="row"><label class="form-label">Năm SX</label></th>
+                <td><input style="width: 100%"  type="text" class="form-control" placeholder="Năm sản xuất"></td>
+            </tr>
+            <tr>
+                <th style="text-align: center" scope="row"><label class="form-label">Năm ĐK</label></th>
+                <td><input style="width: 100%"  type="text" class="form-control" placeholder="Năm đăng ký xe"></td>
+            </tr>
+            <tr>
+                <th style="text-align: center" scope="row"><label class="form-label">Số CN</label></th>
+                <td><input style="width: 100%"  type="text" class="form-control" placeholder="Số chỗ ngồi"></td>
+            </tr>
+            <tr>
+                <th style="text-align: center" scope="row"><label class="form-label">Nhiên liệu</label></th>
+                 <td>
+                     <div class="input-group mb-3">
+                         <select class="custom-select" id="inputGroupSelect01">
+                             <option selected>Chọn nhiên liệu ...</option>
+                             <option value="1">Xăng</option>
+                             <option value="2">Dầu</option>
+                             <option value="3">Điện</option>
+                         </select>
+                     </div>
+                 </td>
+            </tr>
+            <tr>
+                <th style="text-align: center" scope="row"><label class="form-label">Động Cơ</label></th>
+                 <td>
+                    <div class="input-group mb-3">
+                         <select class="custom-select" id="inputGroupSelect01">
+                             <option selected>Chọn động cơ ...</option>
+                             <option value="1">Tự động</option>
+                             <option value="2">Số sàn</option>
+                             <option value="3">Số sàn + Tự động</option>
+                         </select>
+                     </div>
+                </td>
+            </tr>
+            <tr>
+                <th style="text-align: center" scope="row"><label class="form-label">Màu</label></th>
+                <td>
+{#                     <div class="input-group mb-3">#}
+                         <select class="custom-select" id="inputGroupSelect01">
+                             <option selected>Chọn màu...</option>
+                             {% for row in data_color %}
+                                 <option value="{{ row["COLOR_ID"] }}">{{ row["COLOR_NAME"] }}</option>
+                             {% endfor %}
+                         </select>
+{#                     </div>#}
+                </td>
+            </tr>
+            <tr>
+                <th style="text-align: center" scope="row"><label class="form-label">Odo</label></th>
+                <td><input style="width: 100%"  type="text" class="form-control" placeholder="Odo xe"></td>
+            </tr>
+            <tr>
+                <th style="text-align: center" scope="row"><label class="form-label">Ngày nhập</label></th>
+                <td><input style="width: 100%"  type="date" class="form-control" placeholder="Ngày nhập xe"></td>
+            </tr>
+            <tr>
+                <th style="text-align: center" scope="row"><label class="form-label">Ngày bán</label></th>
+                <td><input style="width: 100%"  type="date" class="form-control" placeholder="Ngày bán"></td>
+            </tr>
+            <tr>
+                <th style="text-align: center" scope="row"><label class="form-label">Giá nhập</label></th>
+                <td><input style="width: 100%"  type="text" class="form-control" placeholder="Giá nhập VNĐ"></td>
+            </tr>
+            <tr>
+                <th style="text-align: center" scope="row"><label class="form-label">Chi phí nhập</label></th>
+                <td><input style="width: 100%"  type="text" class="form-control" placeholder="Chi phí nhập VNĐ"></td>
+            </tr>
+            <tr>
+                <th style="text-align: center" scope="row"><label class="form-label">Giá bán</label></th>
+                <td><input style="width: 100%"  type="text" class="form-control" placeholder="Giá bán VNĐ"></td>
+            </tr>
+            <tr>
+                <th style="text-align: center" scope="row"><label class="form-label">Chi phí bán</label></th>
+                <td><input style="width: 100%"  type="text" class="form-control" placeholder="Chi phí bán VNĐ"></td>
+            </tr>
+            <tr>
+                <th style="text-align: center" scope="row"><label class="form-label">Giá thực tế bán</label></th>
+                <td><input style="width: 100%"  type="text" class="form-control" placeholder="Giá thực tế bán VNĐ"></td>
+            </tr>
+            <tr>
+                <th style="text-align: center" scope="row"><label class="form-label">Lãi</label></th>
+                <td><input style="width: 100%"  type="text" class="form-control" placeholder="Lãi VNĐ"></td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <th scope="row">Thêm</th>
+                <td><button style="width: 100%" type="submit"><i class="fas fa-plus fa-sm fa-1x"></i></button></td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
 
-</table>
 </div>
+{#<script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>#}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
+<script>
+    console.log("hello world 1")
+    $( "#chon-hang-xe" ).change(() => {
+        console.log($( "#chon-hang-xe option:selected" ).val())
+    });
 
+    $(function () {
+        console.log("hello world 2")
+        let obj = JSON.parse('{{ data_brand_model | safe  }}');
+        {#let obj = JSON.parse('{"name":"John", "birth":"1986-12-14", "city":"New York"}');#}
+        console.log("hello world 3")
+        console.log(obj)
+    })
+
+</script>
+{#<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>#}
+<script src="{{ url_for('static', filename='js/popper.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
 
 </body>
 </html>

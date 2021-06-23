@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+{#    <meta name="viewport" content="width=device-width, initial-scale=1">#}
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Thêm Xe Mới</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='icon/volang.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+{#    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-grid.css') }}">#}
+{#    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-reboot.css') }}">#}
+{#    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">#}
+    <link rel="stylesheet" href="{{ url_for('static', filename='fa/css/all.css') }}">
+</head>
+<body>
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item" aria-current="page"><a href="{{ url_for('list_xe') }}">Danh sách xe</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Quản lý giá  - mua - bán</li>
+        </ol>
+    </nav>
+    <div class="container-fluid">
+        <table width="100%" class="table">
+            <thead>
+            <tr>
+                <th style="text-align: center" width="20%">Tên</th>
+                <th style="text-align: center" width="80%"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th style="text-align: center" scope="row"><label class="form-label">ID Xe</label></th>
+                <td>{{ data_prices['PRODUCT_ID'] }}</td>
+            </tr>
+
+            <tr>
+                <th style="text-align: center" scope="row"><label class="form-label">Mã Xe</label></th>
+                <td>{{ data_prices['PRODUCT_ID_NUMBER'] }}</td>
+            </tr>
+            <tr>
+                <th style="text-align: center" scope="row"><label class="form-label">Tên Xe</label></th>
+                <td>{{ data_prices['PRODUCT_NAME'] }}</td>
+            </tr>
+            <tr>
+                <th style="text-align: center" scope="row"><label class="form-label">Ngày nhập</label></th>
+                <td>{{ data_prices['PRODUCT_GET_DATE'] }}</td>
+            </tr>
+            <tr>
+                <th style="text-align: center" scope="row"><label class="form-label">Ngày bán</label></th>
+                {% if data_prices['PRODUCT_SELL_DATE'] == "None" %}
+                    <td><input style="width: 100%"  type="date" class="form-control" ></td>
+                {% else %}
+                    <td>{{ data_prices['PRODUCT_SELL_DATE'] }}</td>
+                {% endif %}
+            </tr>
+            <tr>
+                <th style="text-align: center" scope="row"><label class="form-label">Giá nhập</label></th>
+                {% if data_prices['PRODUCT_VALUE_1'] == "None" %}
+                    <td><input style="width: 100%"  type="text" class="form-control" name="PRODUCT_VALUE_1" placeholder="VNĐ"></td>
+                {% else %}
+                    <td>{{ data_prices['PRODUCT_VALUE_1'] }}</td>
+                {% endif %}
+            </tr>
+
+             <tr>
+                <th style="text-align: center" scope="row"><label class="form-label">Chi phí nhập</label></th>
+                {% if data_prices['PRODUCT_VALUE_2'] == "None" %}
+                    <td><input style="width: 100%"  type="text" class="form-control" name="PRODUCT_VALUE_2" placeholder="VNĐ"></td>
+                {% else %}
+                    <td>{{ data_prices['PRODUCT_VALUE_2'] }}</td>
+                {% endif %}
+            </tr>
+
+             <tr>
+                <th style="text-align: center" scope="row"><label class="form-label">Giá bán</label></th>
+                {% if data_prices['PRODUCT_VALUE_3'] == "None" %}
+                    <td><input style="width: 100%"  type="text" class="form-control" name="PRODUCT_VALUE_3" placeholder="VNĐ"></td>
+                {% else %}
+                    <td>{{ data_prices['PRODUCT_VALUE_3'] }}</td>
+                {% endif %}
+            </tr>
+
+             <tr>
+                <th style="text-align: center" scope="row"><label class="form-label">Chi phí bán</label></th>
+                {% if data_prices['PRODUCT_VALUE_4'] == "None" %}
+                    <td><input style="width: 100%"  type="text" class="form-control" name="PRODUCT_VALUE_4" placeholder="VNĐ"></td>
+                {% else %}
+                    <td>{{ data_prices['PRODUCT_VALUE_4'] }}</td>
+                {% endif %}
+            </tr>
+
+             <tr>
+                <th style="text-align: center" scope="row"><label class="form-label">Giá bán thực tế</label></th>
+                {% if data_prices['PRODUCT_VALUE_5'] == "None" %}
+                    <td><input style="width: 100%"  type="text" class="form-control" name="PRODUCT_VALUE_5" placeholder="VNĐ"></td>
+                {% else %}
+                    <td>{{ data_prices['PRODUCT_VALUE_5'] }}</td>
+                {% endif %}
+            </tr>
+
+             <tr>
+                <th style="text-align: center" scope="row"><label class="form-label">Lãi</label></th>
+                {% if data_prices['PRODUCT_VALUE_6'] == "None" %}
+                    <td></td>
+{#                    <td><input style="width: 100%"  type="text" class="form-control" name="PRODUCT_VALUE_1" placeholder="VNĐ"></td>#}
+                {% else %}
+                    <td>{{ data_prices['PRODUCT_VALUE_6'] }}</td>
+                {% endif %}
+            </tr>
+
+
+            </tbody>
+            <tfoot>
+            <tr>
+                <th style="text-align: center" scope="row">Cập nhật</th>
+                <td><button style="width: 100%" type="submit"><i class="fas fas fa-edit fa-1x"></i></button></td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+
+</div>
+<script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+{#<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>#}
+{#<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>#}
+<script src="{{ url_for('static', filename='js/popper.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+
+</body>
+</html>
