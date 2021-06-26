@@ -5,11 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Quản Lý Xe</title>
     <link rel="shortcut icon" href="{{ url_for('static', filename='icon/volang.png') }}">
+{#    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&amp;display=fallback">#}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-grid.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-reboot.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='fa/css/all.css') }}">
-
+{#    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/fontawesome-free/css/all.min.css') }}">#}
+{#    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">#}
+{#    <link rel="stylesheet" href="{{ url_for('static', filename='plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">#}
+{#    <link rel="stylesheet" href="{{ url_for('static', filename='dist/css/adminlte.min.css') }}">#}
 </head>
 <body>
 <div class="container">
@@ -28,23 +32,25 @@
         </div><!-- /input-group -->
     </div><!-- /.col-lg-6 -->
     <br>
-    <table  class="table table-hover table-sm">
+    <br>
+    <table  class="table table-hover table-sm table-bordered table-responsive">
         <thead>
         <tr>
-            <th width="5%" scope="col">STT</th>
-            <th scope="col">Ngày nhập</th>
-            <th scope="col">Mã Xe</th>
-            <th scope="col">Tên Xe</th>
-            <th scope="col">Hãng Xe</th>
-            <th scope="col">Trạng thái</th>
-            <th scope="col">QL giá</th>
-            <th scope="col">Chi tiết</th>
+            <th style="text-align: center" width="10%" scope="col">STT</th>
+            <th style="text-align: center" width="10%" scope="col">Ngày nhập</th>
+            <th style="text-align: center" width="15%" scope="col">Mã Xe</th>
+            <th style="text-align: center" width="10%" scope="col">Tên Xe</th>
+            <th style="text-align: center" width="10%" scope="col">Hãng Xe</th>
+            <th style="text-align: center" width="10%" scope="col">Trạng thái</th>
+            <th style="text-align: center" width="10%" scope="col">QL giá</th>
+            <th style="text-align: center" width="10%" scope="col">Chi tiết</th>
+            <th style="text-align: center" width="10%" scope="col">Thêm ảnh</th>
         </tr>
         </thead>
         <tbody id="myTable">
         {% for row in data_short %}
         <tr>
-            <th scope="row">{{ loop.index }}</th>
+            <th style="text-align: center" scope="row">{{ loop.index }}</th>
             <td>{{ row['PRODUCT_GET_DATE'] }}</td>
             <td>{{ row['PRODUCT_ID_NUMBER'] }}</td>
             <td>{{ row['PRODUCT_NAME'] }}</td>
@@ -53,14 +59,26 @@
             <td>
                 <form action="{{ url_for('xe_gia') }}" method="post">
                     <input type="hidden" name="PRODUCT_ID" value="{{ row["PRODUCT_ID"] }}">
-                    <button  type="submit"><i class="fas fa-dollar-sign fa-1x"></i></button>
+{#                    <button class="btn-success" style="border-radius: 50%"  type="submit"><i class="fas fa-dollar-sign fa-1x"></i></button>#}
+                    <button class="" style="width: 100%" type="submit"><i class="fas fa-dollar-sign fa-1x"></i></button>
+
                 </form>
             </td>
             <td>
                 <input type="hidden" name="" value="{{ row["PRODUCT_ID"] }}">
-                <form action="{{ url_for('xe') }}" method="post">
-                    <button  type="submit"><i class="fas fa-chevron-right fa-1x"></i></button>
-                </form>
+{#                <form action="{{ url_for('xe') }}" method="post">#}
+{#                    <button class="btn-info" style="border-radius: 50%"  type="submit"><i class="fas fa-chevron-right fa-1x"></i></button>                     #}
+                    <button class="" style="width: 100%" type="submit"><i class="fas fa-chevron-right fa-1x"></i></button>
+
+{#                </form>#}
+            </td>
+            <td>
+                <input type="hidden" name="" value="{{ row["PRODUCT_ID"] }}">
+{#                <form action="{{ url_for('xe') }}" method="post">#}
+{#                    <button class="btn-info" style="border-radius: 50%"  type="submit"><i class="fas fa-chevron-right fa-1x"></i></button>                     #}
+                    <button class="" style="width: 100%" type="submit"><i class="fas fa-images fa-1x"></i></button>
+
+{#                </form>#}
             </td>
         </tr>
         {% endfor %}
@@ -68,16 +86,33 @@
         <tfoot>
             <tr>
                 <td style="text-align: center" scope="row" colspan="6">Thêm mới</td>
-                <td colspan="2">
-                    <a style="width: 100%" href="{{ url_for('them_xe') }}"><i class="fas fa-plus fa-sm fa-2x"></i></a>
+                <td style="text-align: center" colspan="3">
+                    <a class="btn btn-success" style="width: 100%; text-align: center" href="{{ url_for('them_xe') }}"><i class="fas fa-plus fa-sm fa-2x"></i></a>
                 </td>
             </tr>
         </tfoot>
-</table>
+    </table>
 </div>
+<script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
 
-<script src="{{ url_for('static', filename='js/bootstrap.bundle.js') }}"></script>
-<script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+{#<script src="{{ url_for('static', filename='js/popper.js') }}"></script>#}
+{#<script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>#}
+{#<script src="{{ url_for('static', filename='plugins/jquery/jquery.min.js') }}"></script>#}
+{#<script src="{{ url_for('static', filename='plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>#}
+{#<script src="{{ url_for('static', filename='plugins/datatables/jquery.dataTables.min.js') }}"></script>#}
+{#<script src="{{ url_for('static', filename='plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>#}
+{#<script src="{{ url_for('static', filename='plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>#}
+{#<script src="{{ url_for('static', filename='plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>#}
+{#<script src="{{ url_for('static', filename='plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>#}
+{#<script src="{{ url_for('static', filename='plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>#}
+{#<script src="{{ url_for('static', filename='plugins/jszip/jszip.min.js') }}"></script>#}
+{#<script src="{{ url_for('static', filename='plugins/pdfmake/pdfmake.min.js') }}"></script>#}
+{#<script src="{{ url_for('static', filename='plugins/pdfmake/vfs_fonts.js') }}"></script>#}
+{#<script src="{{ url_for('static', filename='plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>#}
+{#<script src="{{ url_for('static', filename='plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>#}
+{#<script src="{{ url_for('static', filename='plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>#}
+
 
 </body>
 </html>

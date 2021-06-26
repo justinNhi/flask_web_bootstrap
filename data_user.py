@@ -1,4 +1,4 @@
-import jwt
+# import jwt
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine, and_, inspect, func, cast, Numeric, VARBINARY, types, update, insert

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+{#    <meta name="viewport" content="width=device-width, initial-scale=1">#}
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Thêm Xe Mới</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='icon/volang.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+{#    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-grid.css') }}">#}
+{#    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-reboot.css') }}">#}
+{#    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">#}
+    <link rel="stylesheet" href="{{ url_for('static', filename='fa/css/all.css') }}">
+</head>
+<body>
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item" aria-current="page"><a href="{{ url_for('list_xe') }}">Danh sách xe</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Quản lý giá  - mua - bán</li>
+        </ol>
+    </nav>
+    <div class="container-fluid">
+        <form action="{{ url_for('xe_gia_cap_nhat') }}" method="post">
+            <table width="100%" class="table table-sm table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th style="text-align: center"  width="50%"></th>
+                    <th style="text-align: center" width="50%">Edit</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th style="padding-left: 2%" scope="row" colspan=""><label class="form-label">ID Xe: {{ data_prices['PRODUCT_ID'] }}</label></th>
+                    <input name="PRODUCT_ID" type="hidden" value="{{ data_prices['PRODUCT_ID'] }}">
+                    <td></td>
+                </tr>
+                <tr>
+                    <th style="padding-left: 2%" scope="row" colspan=""><label class="form-label">Mã Xe: {{ data_prices['PRODUCT_ID_NUMBER'] }}</label></th>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th style="padding-left: 2%" scope="row"><label class="form-label">Tên Xe: {{ data_prices['PRODUCT_NAME'] }}</label></th>
+                    <td><input style="width: 100%" name="PRODUCT_NAME" value="" type="text" class="form-control" placeholder="Tên Xe"></td>
+                </tr>
+                <tr>
+                    <td style="padding-left: 2%" scope="row"><label class="form-label">Ngày nhập: {{ data_prices['PRODUCT_GET_DATE'] }}</label></td>
+                    <td><input style="width: 100%" name="PRODUCT_GET_DATE"  value="" type="date" class="form-control" ></td>
+                </tr>
+                <tr>
+                    {% if data_prices['PRODUCT_SELL_DATE'] == "None" %}
+                        <td style="padding-left: 2%" scope="row"><label class="form-label">Ngày bán: </label></td>
+                        <td><input style="width: 100%" name="PRODUCT_SELL_DATE"  type="date" class="form-control" ></td>
+                    {% else %}
+                        <td style="padding-left: 2%" scope="row"><label class="form-label">Ngày bán: {{ data_prices['PRODUCT_SELL_DATE'] }}</label></td>
+                        <td><input style="width: 100%" name="PRODUCT_SELL_DATE"  type="date" class="form-control" ></td>
+                    {% endif %}
+                </tr>
+                <tr>
+                    <td style="padding-left: 2%" scope="row"><label class="form-label">Giá nhập: {{ data_prices['PRODUCT_VALUE_1'] }} VNĐ</label></td>
+                    <td>
+                        <input style="width: 100%" value="{{ data_prices['PRODUCT_VALUE_1_number'] }}" type="number" class="form-control tinh-lai" name="PRODUCT_VALUE_1" placeholder="VNĐ" id="gia-nhap">
+                        <input style="width: 100%" value="{{ data_prices['PRODUCT_VALUE_1'] }} đ" disabled id="gia-nhap-convert" class="form-control">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding-left: 2%" scope="row"><label class="form-label">Chi phí nhập: {{ data_prices['PRODUCT_VALUE_2'] }} VNĐ</label></td>
+                    <td>
+                        <input style="width: 100%" value="{{ data_prices['PRODUCT_VALUE_2_number'] }}" type="number" class="form-control tinh-lai" name="PRODUCT_VALUE_2" placeholder="VNĐ" id="chi-phi-nhap">
+                        <input style="width: 100%" value="{{ data_prices['PRODUCT_VALUE_2'] }} đ" disabled id="chi-phi-nhap-convert" class="form-control">
+
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding-left: 2%" scope="row"><label class="form-label">Giá bán: {{ data_prices['PRODUCT_VALUE_3'] }} VNĐ</label></td>
+                    <td>
+                        <input style="width: 100%" value="{{ data_prices['PRODUCT_VALUE_3_number'] }}" type="number" class="form-control tinh-lail" name="PRODUCT_VALUE_3" placeholder="VNĐ" id="gia-ban">
+                        <input style="width: 100%" value="{{ data_prices['PRODUCT_VALUE_3'] }} đ" disabled id="gia-ban-convert" class="form-control">
+
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding-left: 2%" scope="row"><label class="form-label">Chi phí bán: {{ data_prices['PRODUCT_VALUE_4'] }} VNĐ</label></td>
+                    <td>
+                        <input style="width: 100%" value="{{ data_prices['PRODUCT_VALUE_4_number'] }}"  type="number" class="form-control tinh-lai" name="PRODUCT_VALUE_4" placeholder="VNĐ" id="chi-phi-ban">
+                        <input style="width: 100%" value="{{ data_prices['PRODUCT_VALUE_4'] }} đ" disabled id="chi-phi-ban-convert" class="form-control">
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding-left: 2%" scope="row"><label class="form-label">Giá bán thực tế: {{ data_prices['PRODUCT_VALUE_5'] }} VNĐ</label></td>
+                    <td>
+                        <input style="width: 100%" value="{{ data_prices['PRODUCT_VALUE_5_number'] }}"  type="number" class="form-control tinh-lai" name="PRODUCT_VALUE_5" placeholder="VNĐ" id="gia-ban-thuc-te">
+                        <input style="width: 100%" value="{{ data_prices['PRODUCT_VALUE_5'] }} đ" disabled id="gia-ban-thuc-te-convert" class="form-control">
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="table-success" style="padding-left: 2%" scope="row"><label class="form-label">Lãi: {{ data_prices['PRODUCT_VALUE_6'] }} VNĐ</label></td>
+                    <td class="table-success"><input disabled style="width: 100%" value="{{ data_prices['PRODUCT_VALUE_6'] }} đ" type="text" class="form-control" name="PRODUCT_VALUE_6" placeholder="VNĐ" id="tien-lai"></td>
+                </tr>
+                <tr>
+                    <th scope="row" style="padding-left: 2%">Trạng thái: {{ data_prices['PRODUCT_STATUS'] }}</th>
+                    <td>
+                        <div class="input-group mb-3">
+                            <select name="PRODUCT_STATUS" class="custom-select" id="inputGroupSelect01">
+                                <option value="{{ data_prices['PRODUCT_STATUS'] }}">Chọn trạng thái ...</option>
+                                <option value="Mới nhập">Mới nhập</option>
+                                <option value="Xe đem đi dọn">Xe đem đi dọn</option>
+                                <option value="Xe đã cọc">Xe đã cọc</option>
+                                <option value="Xe đang ở Auto">Xe đang ở Auto</option>
+                                <option value="Xe đã bán">Xe đã bán</option>
+                             </select>
+                         </div>
+                    </td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <th style="text-align: center" scope="row" colspan="">Cập nhật</th>
+                    <td><button id="update_gia" style="width: 100%" class="btn btn-success" type="submit"><i class="fas fas fa-edit fa-1x"></i></button></td>
+                </tr>
+                </tfoot>
+            </table>
+        </form>
+    </div>
+
+</div>
+<script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+<script>
+
+    $( "#update_gia" ).click(() => {
+
+    });
+
+    $( "#gia-nhap" ).change(() => {
+        let total = $( "#gia-nhap" ).val();
+        $("#gia-nhap-convert").val(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total));
+    });
+    $( "#gia-nhap" ).click(() => {
+        let total = $( "#gia-nhap" ).val();
+        $("#gia-nhap-convert").val(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total));
+    });
+
+
+    $( "#chi-phi-nhap" ).change(() => {
+        let total = $( "#chi-phi-nhap" ).val();
+        $("#chi-phi-nhap-convert").val(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total));
+    });
+    $( "#chi-phi-nhap" ).click(() => {
+        let total = $( "#chi-phi-nhap" ).val();
+        $("#chi-phi-nhap-convert").val(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total));
+    });
+
+
+    $( "#gia-ban" ).change(() => {
+        let total = $( "#gia-ban" ).val();
+        $("#gia-ban-convert").val(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total));
+    });
+    $( "#gia-ban" ).click(() => {
+        let total = $( "#gia-ban" ).val();
+        $("#gia-ban-convert").val(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total));
+    });
+
+
+    $( "#chi-phi-ban" ).change(() => {
+        let total = $( "#chi-phi-ban" ).val();
+        $("#chi-phi-ban-convert").val(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total));
+    });
+    $( "#chi-phi-ban" ).click(() => {
+        let total = $( "#chi-phi-ban" ).val();
+        $("#chi-phi-ban-convert").val(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total));
+    });
+
+
+    $( "#gia-ban-thuc-te" ).change(() => {
+        let total = $( "#gia-ban-thuc-te" ).val();
+        $("#gia-ban-thuc-te-convert").val(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total));
+    });
+    $( "#gia-ban-thuc-te" ).click(() => {
+        let total = $( "#gia-ban-thuc-te" ).val();
+        $("#gia-ban-thuc-te-convert").val(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total));
+    });
+
+
+
+    $( ".tinh-lai" ).click(() =>{
+        let chi_phi_nhap = parseInt( $( "#gia-nhap" ).val()) + parseInt( $( "#chi-phi-nhap" ).val()) + parseInt( $( "#chi-phi-ban" ).val())
+        let gia_ban = parseInt( $( "#gia-ban-thuc-te" ).val())
+        $( "#tien-lai" ).val(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format((gia_ban-chi_phi_nhap)))
+
+    });
+      $( ".tinh-lai" ).change(() =>{
+        let chi_phi_nhap = parseInt( $( "#gia-nhap" ).val()) + parseInt( $( "#chi-phi-nhap" ).val()) + parseInt( $( "#chi-phi-ban" ).val())
+        let gia_ban = parseInt( $( "#gia-ban-thuc-te" ).val())
+        $( "#tien-lai" ).val(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format((gia_ban-chi_phi_nhap)))
+
+    });
+
+
+</script>
+{#<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>#}
+{#<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>#}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+{#<script src="{{ url_for('static', filename='js/popper.js') }}"></script>#}
+<script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+
+</body>
+</html>
