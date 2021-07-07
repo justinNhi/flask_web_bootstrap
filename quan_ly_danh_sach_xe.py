@@ -31,8 +31,8 @@ PRODUCT_cols_small_cap_nhat_gia_no_val_6 = ["PRODUCT_ID", "PRODUCT_NAME", "PRODU
                                             "PRODUCT_VALUE_2",
                                             "PRODUCT_VALUE_3", "PRODUCT_VALUE_4", "PRODUCT_VALUE_5", "PRODUCT_STATUS"]
 
-PRODUCT_danh_sach_xe_all = ["PRODUCT_ID", "PRODUCT_ID_NUMBER", "PRODUCT_NAME", "PRODUCT_DES", "PRODUCT_TYPE_ID",
-                            "PRODUCT_BRAND_ID", "PRODUCT_BRAND_NAME", "PRODUCT_GET_DATE", "PRODUCT_VALUE_3",
+PRODUCT_danh_sach_xe_all = ["PRODUCT_ID", "PRODUCT_ID_NUMBER", "PRODUCT_NAME", "PRODUCT_MODEL_NAME",
+                            "PRODUCT_BRAND_ID", "PRODUCT_BRAND_NAME", "PRODUCT_GET_DATE", "PRODUCT_TYPE_NAME",
                             "PRODUCT_STATUS"]
 
 
@@ -50,13 +50,17 @@ def get_max_id(TABLE_NAME):
 
 def product_danh_sach_xe():
     session_sql = SessionSql()
-    rs_product_view = session_sql.query(PRODUCT)
+    rs_product_view = session_sql.query(PRODUCT).filter(PRODUCT.PRODUCT_USING_STATUS == 1)
     data = []
     for row in rs_product_view.all():
         data_row = {}
         for name in PRODUCT_danh_sach_xe_all:
             try:
-                data_row[name] = str(getattr(row, name))
+                if name == "PRODUCT_GET_DATE":
+                    str_date = str(getattr(row, name)).split('-')
+                    data_row[name] = str_date[2] + '/' + str_date[1] + '/' +str_date[0]
+                else:
+                    data_row[name] = str(getattr(row, name))
             except:
                 data_row[name] = ""
         data.append(data_row)

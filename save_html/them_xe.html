@@ -55,12 +55,7 @@
                     <th style="text-align: center" scope="row"><label class="form-label">Hãng xe</label></th>
                     <td>
                         <div class="input-group mb-3">
-                             <select name="PRODUCT_BRAND_ID" class="custom-select" id="chon-hang-xe" required>
-                                 <option value="">Chọn thương hiệu ...</option>
-                                 {% for row_brand in data_brand_model %}
-                                    <option value="{{ row_brand['BRAND_ID'] }}">{{ row_brand['BRAND_NAME'] }}</option>
-                                 {% endfor %}
-                             </select>
+
                          </div>
                     </td>
                 </tr>

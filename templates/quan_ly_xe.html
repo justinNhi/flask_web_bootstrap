@@ -2,57 +2,667 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+{#    <meta name="viewport" content="width=device-width, initial-scale=1">#}
     <title>Quản Lý Xe</title>
     <link rel="shortcut icon" href="{{ url_for('static', filename='icon/volang.png') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-theme.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='fa/css/all.css') }}">
 </head>
 <body>
-
-<div class="container">
-    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="{{ url_for('main') }}">Auto Dũng Lâm</a>
-            </div>
-            <div class="collapse navbar-collapse">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a>Quản Lý Xe</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
-            </div><!--/.nav-collapse -->
-        </div>
-    </div>
-</div>
-<div class="container">
-    <div class="accordion" id="accordionExample">
-        <div class="card">
-            <div class="card-header" id="headingOne">
-      <h2 class="mb-0">
-        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-          Collapsible Group Item #1
+<div class="container shadow p-3 mb-5 bg-white rounded" >
+    <nav class="navbar bg-dark ">
+        <div style="width: 20%"><img width="100%" class="" src="{{ url_for('static', filename='img/logo.png') }}" ></div>
+        <a class="navbar-brand" href="{{ url_for('danh_sach_xe') }}">Phần mềm quản lý Danh sách xe</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
         </button>
-      </h2>
-    </div>
-            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-      <div class="card-body">
-        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-      </div>
-    </div>
+    </nav>
+     <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href=""></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{ url_for('danh_sach_xe') }}">Danh sách xe<span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active">>Chi Tiết Xe</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('login') }}">Logout</a>
+                </li>
+            </ul>
+            <span class="navbar-text">
+{#                Navbar text with an inline element#}
+            </span>
+  </div>
+</nav>
+    <br>
+    <table class="table table-striped table-hover table-bordered" id="">
+        <label class="col-form-label-lg">Thông tin xe: {{ data_xe.PRODUCT_ID_NUMBER }} - {{ data_xe.PRODUCT_NAME }}</label>
+        <thead>
+        <tr>
 
-        </div>
-    </div>
+            <th style="text-align: center"  scope="col">Hãng xe</th>
+            <th style="text-align: center"  scope="col">Loại xe</th>
+            <th style="text-align: center"  scope="col">Mẫu xe</th>
+            <th style="text-align: center"  scope="col">Tên xe</th>
+            <th style="text-align: center" width="20%" scope="col">Mã xe</th>
+        </tr>
+        </thead>
+        <tbody id="tbody-danh-sach-xe">
+            <tr>
+                <td style="text-align: center" >{{ data_xe.PRODUCT_BRAND_NAME }}</td>
+                <td style="text-align: center" >{{ data_xe.PRODUCT_MODEL_NAME }}</td>
+                <td style="text-align: center" >{{ data_xe.PRODUCT_TYPE_NAME }}</td>
+                <td style="text-align: center" >{{ data_xe.PRODUCT_NAME }}</td>
+                <td style="text-align: center" >{{ data_xe.PRODUCT_ID_NUMBER }}</td>
+            </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+        <form id="FormCapNhatThongTinXe">
+            <input name="PRODUCT_ID" value="{{ PRODUCT_ID }}" type="hidden">
+            <th scope="col">
+                <select name="PRODUCT_BRAND_ID" class="form-control custom-select" id="ChonHangXe">
+                <option value="">Chọn thương hiệu ...</option>
+                {% for row_brand in data_brand_model %}
+                    <option value="{{ row_brand['BRAND_ID'] }}">{{ row_brand['BRAND_NAME'] }}</option>
+                {% endfor %}
+                </select>
+            </th>
+            <th scope="col">
+                <select name="PRODUCT_MODEL_ID" class="form-control custom-select" id="ChonModelXe">
+                    <option value="">Chọn model xe ...</option>
+                </select>
+            </th>
+            <th scope="col">
+                <select name="PRODUCT_TYPE_ID" class="form-control custom-select" id="">
+                <option value="">Chọn mẫu xe ...</option>
+                {% for row in data_type %}
+                    <option value="{{ row["TYPE_ID"] }}">{{ row["TYPE_NAME"] }}</option>
+                {% endfor %}
+                </select>
+            </th>
+            <th scope="col">
+                <input name="PRODUCT_NAME" type="text" class="form-control">
+            </th>
+            <th scope="col">
+                <button type="submit" class="form-control" id="ButtonCapNhatThongTinXe">Cập nhật</button>
+            </th>
+        </form>
+        </tr>
+        </tfoot>
+    </table>
+    <table class="table table-striped table-hover table-bordered" id="">
+        <label class="col-form-label-lg">Quản Lý Giá Xe</label>
+        <thead>
+        <tr>
+            <th style="text-align: center"  scope="col">Ngày Nhập</th>
+            <th style="text-align: center"  scope="col">Giá Nhập</th>
+            <th style="text-align: center"  scope="col">Chi Phí Nhập</th>
+            <th style="text-align: center"  scope="col">Giá Bán</th>
+            <th  width="20%"></th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td width="20%" style="text-align: center" >{{ data_xe.PRODUCT_GET_DATE}}</td>
+                <td width="20%" style="text-align: center" id=""><input  type="text"  value="" disabled class="form-control" id="TextGiaTri1"></td>
+                <td width="20%" style="text-align: center" id=""><input  type="text"  value="" disabled class="form-control" id="TextGiaTri2"></td>
+                <td width="20%" style="text-align: center" id=""><input  type="text"  value="" disabled class="form-control" id= "TextGiaTri3"></td>
+            </tr>
+            <tr>
+            <form id="FormUpdateGiaBan">
+                <input type="hidden" name="PRODUCT_ID" value="{{ PRODUCT_ID }}">
+                <th scope="col">
+                    <input name="PRODUCT_GET_DATE" value="" type="date" class="form-control" >
+                </th>
+                <th scope="col">
+                    <input type="text" name="PRODUCT_VALUE_1" class="form-control" id="InputGiaTri1" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" value="" data-type="currency" placeholder="0,000,000 đ">
+                </th>
+                <th scope="col">
+                    <input type="text" name="PRODUCT_VALUE_2" class="form-control" id="InputGiaTri2" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" value="" data-type="currency" placeholder="0,000,000 đ">
+                </th>
+                <th scope="col">
+                    <input type="text" name="PRODUCT_VALUE_3" class="form-control" id="InputGiaTri3" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" value="" data-type="currency" placeholder="0,000,000 đ">
+                </th>
+                <th scope="col">
+                    <button type="submit" class="form-control" id="ButtonUpdateGiaBan">Cập nhật</button>
+                </th>
+            </form>
+            </tr>
+        </tbody>
+
+        <thead>
+    <tr>
+        <th style="text-align: center"  scope="col">Ngày Bán</th>
+        <th style="text-align: center"  scope="col">Chi Phí bán</th>
+        <th style="text-align: center"  scope="col">Giá Bán Thực Tế</th>
+        <th style="text-align: center"  scope="col">Lãi Thực tế</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody id="tbody-danh-sach-xe">
+        <tr>
+            <td style="text-align: center" >{{ data_xe.PRODUCT_SELL_DATE }}</td>
+            <td style="text-align: center" ><input type="text"  value="" disabled class="form-control" id="TextGiaTri4"></td>
+            <td style="text-align: center" ><input type="text"  value="" disabled class="form-control" id="TextGiaTri5"></td>
+            <td style="text-align: center" rowspan="2"><input type="text"  value="" disabled class="form-control" id="TextGiaTri6"></td>
+        </tr>
+        <tr>
+        <form id="FormUpdateGiaBanThucTe">
+            <input type="hidden" name="PRODUCT_ID" value="{{ PRODUCT_ID }}">
+
+            <th scope="col">
+                <input type="date" class="form-control" name="PRODUCT_SELL_DATE">
+            </th>
+             <th scope="col">
+                    <input type="text" name="PRODUCT_VALUE_4" class="form-control" id="InputGiaTri1" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" value="" data-type="currency" placeholder="0,000,000 đ">
+                </th>
+                <th scope="col">
+                    <input type="text" name="PRODUCT_VALUE_5" class="form-control" id="InputGiaTri2" pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$" value="" data-type="currency" placeholder="0,000,000 đ">
+                </th>
+            <th scope="col">
+                <button type="submit" class="form-control" id="ButtonUpdateGiaBanThucTe">Cập nhật</button>
+            </th>
+        </form>
+    </tr>
+    </tbody>
+    </table>
+    <table class="table table-striped table-hover table-bordered" id="">
+    <label class="col-form-label-lg">Quản lý Trạng thái Xe</label>
+    <thead>
+    <tr>
+
+        <th style="text-align: center"  width="20%" scope="col">Trạng Thái</th>
+        <th style="text-align: center"  width="20%" scope="col">Trạng Thái mới</th>
+        <th style="text-align: center"  width="20%" scope="col"></th>
+        <th style="text-align: center"  scope="col"></th>
+        <th style="text-align: center"    scope="col"></th>
+    </tr>
+    </thead>
+    <tbody id="tbody-danh-sach-xe">
+        <tr>
+            <td style="text-align: center" >{{ data_xe.PRODUCT_STATUS}}</td>
+            <form id="FormUpdateTrangThai">
+                <input type="hidden" name="PRODUCT_ID" value="{{ PRODUCT_ID }}">
+                <td style="text-align: center" >
+                    <select name="PRODUCT_STATUS" class="custom-select" id="inputGroupSelect01" required>
+                         <option value="">Chọn trạng thái ...</option>
+                         <option value="Mới nhập">Mới nhập</option>
+                         <option value="Xe đem đi dọn">Xe đem đi dọn</option>
+                         <option value="Xe đã cọc">Xe đã cọc</option>
+                         <option value="Xe đang ở Auto">Xe đang ở Auto</option>
+                         <option value="Xe đã bán">Xe đã bán</option>
+                    </select>
+                </td>
+            </form>
+            <td style="text-align: center" ><button type="submit" class="form-control" id="ButtonUpdateTrangThai">Cập nhật</button></td>
+            <td style="text-align: center" ></td>
+            <td style="text-align: center" ></td>
+        </tr>
+    </tbody>
+</table>
+
+    <table class="table table-striped table-hover table-bordered" id="">
+        <label class="col-form-label-lg">Quản lý chi tiết xe 1</label>
+        <thead>
+        <tr>
+
+            <th style="text-align: center"  style="text-align: center" scope="col">Xuất xứ</th>
+            <th style="text-align: center"  scope="col">Năm sản xuất</th>
+            <th style="text-align: center"  scope="col">Năm đăng ký</th>
+            <th style="text-align: center"  scope="col">Số chỗ ngồi</th>
+            <th style="text-align: center"  width="20%"  scope="col"></th>
+        </tr>
+        </thead>
+        <tbody id="tbody-danh-sach-xe">
+            <tr>
+                <td style="text-align: center" >{{ data_xe.PRODUCT_ORIGIN }}</td>
+                <td style="text-align: center" >{{ data_xe.PRODUCT_RELEASE_YEAR }}</td>
+                <td style="text-align: center" >{{ data_xe.PRODUCT_YEAR }}</td>
+                <td style="text-align: center" >{{ data_xe.PRODUCT_SEAT }}</td>
+                <td style="text-align: center" ></td>
+            </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <form id="FormUpdateChitietXe1">
+                <input type="hidden" name="PRODUCT_ID" value="{{ PRODUCT_ID }}">
+                <th scope="col">
+                    <select name="PRODUCT_ORIGIN" class="form-control custom-select">
+                    <option value="">Chọn Xuất xứ ...</option>
+                        <option value="Láp ráp trong nước">Láp ráp trong nước</option>
+                        <option value="Nhập khẩu">Nhập khẩu</option>
+                    </select>
+                </th>
+                <th scope="col">
+                    <input TYPE="number" name="PRODUCT_RELEASE_YEAR" class="form-control" value="">
+                </th>
+                <th scope="col">
+                    <input TYPE="number" name="PRODUCT_YEAR" class="form-control" value="">
+                </th>
+                <th scope="col">
+                    <input TYPE="number" name="PRODUCT_SEAT" class="form-control" value="">
+                </th>
+                <th scope="col">
+                    <button type="submit" class="form-control" id="ButtonUpdateChitietXe1">Cập nhật</button>
+                </th>
+            </form>
+        </tr>
+
+        </tfoot>
+    </table>
+    <table class="table table-striped table-hover table-bordered" id="t">
+        <label class="col-form-label-lg">Quản lý chi tiết xe 2</label>
+        <thead>
+        <tr>
+            <th style="text-align: center" scope="col">Màu</th>
+            <th style="text-align: center"  scope="col">Odo</th>
+            <th style="text-align: center"  scope="col">Nhiên liệu</th>
+            <th style="text-align: center"  scope="col">Động cơ</th>
+            <th style="text-align: center"  width="20%"  scope="col"></th>
+        </tr>
+        </thead>
+        <tbody id="tbody-danh-sach-xe">
+            <tr>
+                <td style="text-align: center" >{{ data_xe.PRODUCT_COLOR }}</td>
+                <td style="text-align: center" >{{ data_xe.PRODUCT_ODO}}</td>
+                <td style="text-align: center" >{{ data_xe.PRODUCT_FUEL_NAME }}</td>
+                <td style="text-align: center" >{{ data_xe.PRODUCT_ENGINE }}</td>
+                <td style="text-align: center" ></td>
+            </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <form id="FormUpdateChitietXe2">
+            <input type="hidden" name="PRODUCT_ID" value="{{ PRODUCT_ID }}">
+            <th scope="col">
+                <select name="PRODUCT_COLOR" class="custom-select" id="chon-hang-xe" required>
+                <option value="">Chọn màu...</option>
+                     {% for row in data_color %}
+                         <option value="{{ row["COLOR_NAME"] }}">{{ row["COLOR_NAME"] }}</option>
+                     {% endfor %}
+                </select>
+            </th>
+
+            <th scope="col">
+                <input TYPE="number" name="PRODUCT_ODO" class="form-control" value="">
+            </th>
+
+            <th scope="col">
+                <select name="PRODUCT_FUEL_NAME" class="custom-select" id="inputGroupSelect01" required>
+                     <option value="">Chọn nhiên liệu ...</option>
+                     <option value="Xăng">Xăng</option>
+                     <option value="Dầu">Dầu</option>
+                     <option value="Điện">Điện</option>
+                 </select>
+            </th>
+
+            <th scope="col">
+                <select name="PRODUCT_ENGINE" class="custom-select" id="inputGroupSelect01" required>
+                                 <option value="">Chọn động cơ ...</option>
+                                 <option value="Tự động">Tự động</option>
+                                 <option value="Số sàn">Số sàn</option>
+                                 <option value="Số sàn + Tự động">Số sàn + Tự động</option>
+                             </select>
+            </th>
+            <th scope="col">
+                <button type="submit" class="form-control" id="ButtonUpdateChitietXe2">Cập nhật</button>
+            </th>
+            </form>
+        </tr>
+
+        </tfoot>
+    </table>
+
+{#    <table class="table table-striped table-hover table-bordered" id="">#}
+{#        <label class="col-form-label-lg">Quản Lý Hình Ảnh</label>#}
+{#        <thead>#}
+{#        <tr>#}
+{#            <th scope="col">STT</th>#}
+{#            <th scope="col">Ảnh</th>#}
+{#            <th scope="col"></th>#}
+{#            <th ></th>#}
+{#        </tr>#}
+{#        </thead>#}
+{#        <tbody id="tbody-danh-sach-xe">#}
+{#        <tr>#}
+{#            <td></td>#}
+{#            <form id="FormUploadHinh">#}
+{#            <td><input id="upload" type="file" onchange="readURL(this);" class="form-control border-0"></td>#}
+{#            <td width="50%"><img width="100%" id="imageResult" src="#" alt="" class="img-fluid rounded shadow-sm mx-auto d-block"></td>#}
+{#            <td>#}
+{#                <select name="PRODUCT_ENGINE" class="custom-select" id="inputGroupSelect01" required>#}
+{#                     <option value="">Chọn loại Hình ...</option>#}
+{#                    {% for i in range(1,13) %}#}
+{#                        <option value="1">{{ i }}</option>#}
+{#                    {% endfor %}#}
+{#                </select>#}
+{#            </td>#}
+{#            </form>#}
+{#        </tr>#}
+{#        </tbody>#}
+{#        <tfoot>#}
+{#        <tr>#}
+{#            <td></td>#}
+{#            <td>#}
+{#            </td>#}
+{#        </tr>#}
+{#            <tr>#}
+{#                <th colspan="3"><button type="submit" class="form-control" id="ButtonUploadHinh">Cập nhật Hình ảnh</button>#}
+{#                <th colspan="1"><button type="submit" id="resetImage" class="form-control">Reset</button> </th>#}
+{#            </tr>#}
+{#        </tfoot>#}
+{##}
+{##}
+{#    </table>#}
+{##}
+{#    <button style="margin-left: 90%; width: 10%;display:inline-block;" type="submit" class="form-control">Vô hiệu hóa</button>#}
+
 </div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="{{ url_for('static', filename='js/bootstrap.js') }} "></script>
+{#<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>#}
+{#<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>#}
+{##}
+<script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+<script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+<script>
+    $( "#ChonHangXe" ).change(() => {
+        $("#MaXeDisaable").val('')
+        $( "#ChonModelXe" ).empty();
+        $( "#ChonModelXe" ).append(`<option value="">Chọn model xe ...</option>`);
+        let brandId = $( "#ChonHangXe option:selected" ).val();
+        let obj = JSON.parse('{{ data_brand_model_json | safe  }}');
+        let options = obj.filter(e => e.BRAND_ID == brandId)[0].MODEL;
+        {#console.log(options,brandId)#}
+        console.log(options);
+        options.forEach(option => {
+            $( "#ChonModelXe" ).append(`<option value=${option.MODEL_ID}>${option.MODEL_NAME}</option>`)
+        });
+        {#$( "#chon-model-xe" ).empty().append(`<option value=${}>${}</option>`)#}
+    });
+    $("#ChonModelXe").change(() => {
+    var add_ma_xe = [];
+    add_ma_xe.push($( "#ChonHangXe option:selected" ).text().substring(0,2).toUpperCase());
+    add_ma_xe.push("-")
+    {#add_ma_xe.push($( "#chon-hang-xe option:selected" ).text().toUpperCase());#}
+    {#add_ma_xe.push($( "#chon-model-xe option:selected" ).text().substring(0,2).toUpperCase());#}
+    add_ma_xe.push($( "#ChonModelXe option:selected" ).text().toUpperCase());
+    add_ma_xe.push("-")
+    add_ma_xe.push($( "#IDxe" ).val());
+    $( "#MaXeDisaable" ).val(add_ma_xe.join('').replace(' ',''));
+    $( "#MaXe" ).val(add_ma_xe.join('').replace(' ',''));
+     {#$( "#ma-xe-trim" ).val($( "#ma-xe-trim" ).val().split(' ').map(e => e.trim()).join(''));#}
+    });
+
+    function getFormData($form){
+        var unindexed_array = $form.serializeArray();
+        var indexed_array = {};
+
+        $.map(unindexed_array, function(n, i){
+            indexed_array[n['name']] = n['value'];
+        });
+
+        return indexed_array;
+    }
+    $( "#ButtonCapNhatThongTinXe" ).click((e) =>{
+        e.preventDefault()
+         $.ajax({
+             url : '{{ url_for('quan_ly_xe_cap_nhat_thong_tin_xe') }}',
+             data: {"data": JSON.stringify(getFormData($("#FormCapNhatThongTinXe")))},
+             type : 'POST',
+             success: function (response){
+                 console.log(response)
+                 console.log(JSON.parse(response))
+                 location.reload()
+             },
+             error: function (error){
+                 console.log(error);
+             }
+         });
+     });
+</script>
+<script>
+   $( document ).ready(function() {
+       $("#TextGiaTri1").val(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format({{ data_xe.PRODUCT_VALUE_1 }}));
+       $("#TextGiaTri2").val(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format({{ data_xe.PRODUCT_VALUE_2 }}));
+       $("#TextGiaTri3").val(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format({{ data_xe.PRODUCT_VALUE_3 }}));
+       $("#TextGiaTri4").val(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format({{ data_xe.PRODUCT_VALUE_4 }}));
+       $("#TextGiaTri5").val(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format({{ data_xe.PRODUCT_VALUE_5 }}));
+       $("#TextGiaTri6").val(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format({{ data_xe.PRODUCT_VALUE_6 }}));
+    });
+
+
+$("input[data-type='currency']").on({
+    keyup: function() {
+      formatCurrency($(this));
+    },
+    blur: function() {
+      formatCurrency($(this), "blur");
+    }
+});
+
+
+function formatNumber(n) {
+  // format number 1000000 to 1,234,567
+  return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+}
+
+
+
+
+
+function formatCurrency(input, blur) {
+  // appends $ to value, validates decimal side
+  // and puts cursor back in right position.
+
+  // get input value
+  var input_val = input.val();
+
+  // don't validate empty input
+  if (input_val === "") { return; }
+
+  // original length
+  var original_len = input_val.length;
+
+  // initial caret position
+  var caret_pos = input.prop("selectionStart");
+
+  // check for decimal
+  if (input_val.indexOf(".") >= 0) {
+
+    // get position of first decimal
+    // this prevents multiple decimals from
+    // being entered
+    var decimal_pos = input_val.indexOf(".");
+
+    // split number by decimal point
+    var left_side = input_val.substring(0, decimal_pos);
+    var right_side = input_val.substring(decimal_pos);
+
+    // add commas to left side of number
+    left_side = formatNumber(left_side);
+
+    // validate right side
+    right_side = formatNumber(right_side);
+
+    // On blur make sure 2 numbers after decimal
+    if (blur === "blur") {
+      right_side += "00";
+    }
+
+    // Limit decimal to only 2 digits
+    right_side = right_side.substring(0, 2);
+
+    // join number by .
+    input_val = "$" + left_side + "." + right_side;
+
+  } else {
+    // no decimal entered
+    // add commas to number
+    // remove all non-digits
+    input_val = formatNumber(input_val);
+    input_val = input_val ;
+
+    // final formatting
+    if (blur === "blur") {
+      input_val += " đ";
+    }
+  }
+
+  // send updated string to input
+  input.val(input_val);
+
+  // put caret back in the right position
+  var updated_len = input_val.length;
+  caret_pos = updated_len - original_len + caret_pos;
+  input[0].setSelectionRange(caret_pos, caret_pos);
+}
+
+
+ $( "#ButtonUpdateGiaBan" ).click((e) =>{
+        e.preventDefault()
+         $.ajax({
+             url : '{{ url_for('quan_ly_xe_cap_nhat_chi_phi_nhap_va_gia_ban') }}',
+             data: {"data": JSON.stringify(getFormData($("#FormUpdateGiaBan")))},
+             type : 'POST',
+             success: function (response){
+                 console.log(response)
+                 console.log(JSON.parse(response))
+                 location.reload()
+             },
+             error: function (error){
+                 console.log(error);
+             }
+         });
+     });
+ $( "#ButtonUpdateGiaBanThucTe" ).click((e) =>{
+        e.preventDefault()
+         $.ajax({
+             url : '{{ url_for('quan_ly_xe_cap_nhat_chi_phi_ban_va_gia_ban_thuc_te') }}',
+             data: {"data": JSON.stringify(getFormData($("#FormUpdateGiaBanThucTe")))},
+             type : 'POST',
+             success: function (response){
+                 console.log(response)
+                 console.log(JSON.parse(response))
+                 location.reload()
+             },
+             error: function (error){
+                 console.log(error);
+             }
+         });
+     });
+
+
+</script>
+<script>
+
+ $( "#ButtonUpdateChitietXe1" ).click((e) =>{
+        e.preventDefault()
+         $.ajax({
+             url : '{{ url_for('quan_ly_xe_cap_nhat_chi_tiet_xe_1') }}',
+             data: {"data": JSON.stringify(getFormData($("#FormUpdateChitietXe1")))},
+             type : 'POST',
+             success: function (response){
+                 console.log(response)
+                 console.log(JSON.parse(response))
+                 location.reload()
+             },
+             error: function (error){
+                 console.log(error);
+             }
+         });
+     });
+  $( "#ButtonUpdateChitietXe2" ).click((e) =>{
+        e.preventDefault()
+         $.ajax({
+             url : '{{ url_for('quan_ly_xe_cap_nhat_chi_tiet_xe_2') }}',
+             data: {"data": JSON.stringify(getFormData($("#FormUpdateChitietXe2")))},
+             type : 'POST',
+             success: function (response){
+                 console.log(response)
+                 console.log(JSON.parse(response))
+                 location.reload()
+             },
+             error: function (error){
+                 console.log(error);
+             }
+         });
+     });
+
+  $( "#ButtonUpdateTrangThai" ).click((e) =>{
+        e.preventDefault()
+         $.ajax({
+             url : '{{ url_for('quan_ly_xe_cap_nhat_trang_thai_xe') }}',
+             data: {"data": JSON.stringify(getFormData($("#FormUpdateTrangThai")))},
+             type : 'POST',
+             success: function (response){
+                 console.log(response)
+                 console.log(JSON.parse(response))
+                 location.reload()
+             },
+             error: function (error){
+                 console.log(error);
+             }
+         });
+     });
+$("#resetImage").click(function (){
+   location.reload()
+});
+
+  /*  ==========================================
+    SHOW UPLOADED IMAGE
+* ========================================== */
+function readURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            $('#imageResult')
+                .attr('src', e.target.result);
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+$(function () {
+    $('#upload').on('change', function () {
+        readURL(input);
+    });
+});
+
+const toBase64 = file => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+});
+
+$("#ButtonUploadHinh").click(async function (){
+    let fileUpload = $("#upload")[0].files[0]
+    let done_fileUpload = await toBase64(fileUpload)
+    $.ajax({
+             url : '{{ url_for('quan_ly_xe_upload_hinh_anh') }}',
+             data: {"data": done_fileUpload},
+             type : 'POST',
+             success: function (response){
+                 console.log(response)
+                 console.log(JSON.parse(response))
+                 location.reload()
+             },
+             error: function (error){
+                 console.log(error);
+             }
+         });
+});
+
+
+
+</script>
 </body>
 </html>

@@ -3,7 +3,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine, and_, inspect, func
 from datetime import datetime, time, timedelta, date
 import config
-
+import base64
 Base = automap_base()
 engine = config.get_config()
 SessionSql = sessionmaker()
@@ -16,6 +16,8 @@ BRAND_MODEL = Base.classes.BRAND_MODEL
 BRAND = Base.classes.BRAND
 
 PRODUCT = Base.classes.PRODUCT
+PRODUCT_IMAGE = Base.classes.PRODUCT_IMAGE
+
 PRODUCT_cols = PRODUCT.__table__.columns.keys()
 PRODUCT_cols_small = ["PRODUCT_ID", "PRODUCT_ID_NUMBER", "PRODUCT_NAME", "PRODUCT_DES", "PRODUCT_TYPE_ID",
                       "PRODUCT_BRAND_ID",
@@ -23,19 +25,22 @@ PRODUCT_cols_small = ["PRODUCT_ID", "PRODUCT_ID_NUMBER", "PRODUCT_NAME", "PRODUC
                       "PRODUCT_FUEL_NAME", "PRODUCT_COLOR", "PRODUCT_ODO", "PRODUCT_ENGINE", "PRODUCT_GET_DATE",
                       "PRODUCT_SELL_DATE", "PRODUCT_VALUE_1", "PRODUCT_VALUE_2", "PRODUCT_VALUE_3", "PRODUCT_VALUE_4",
                       "PRODUCT_VALUE_5", "PRODUCT_VALUE_6", "PRODUCT_STATUS"]
-PRODUCT_cols_small_cap_nhat_gia = ["PRODUCT_ID", "PRODUCT_NAME", "PRODUCT_SELL_DATE", "PRODUCT_VALUE_1", "PRODUCT_VALUE_2",
+PRODUCT_cols_small_cap_nhat_gia = ["PRODUCT_ID", "PRODUCT_NAME", "PRODUCT_SELL_DATE", "PRODUCT_VALUE_1",
+                                   "PRODUCT_VALUE_2",
                                    "PRODUCT_VALUE_3", "PRODUCT_VALUE_4", "PRODUCT_VALUE_5", "PRODUCT_VALUE_6",
                                    "PRODUCT_STATUS"]
-PRODUCT_cols_small_cap_nhat_gia_no_val_6 = ["PRODUCT_ID", "PRODUCT_NAME", "PRODUCT_SELL_DATE", "PRODUCT_VALUE_1", "PRODUCT_VALUE_2",
-                                   "PRODUCT_VALUE_3", "PRODUCT_VALUE_4", "PRODUCT_VALUE_5", "PRODUCT_STATUS"]
-
+PRODUCT_cols_small_cap_nhat_gia_no_val_6 = ["PRODUCT_ID", "PRODUCT_NAME", "PRODUCT_SELL_DATE", "PRODUCT_VALUE_1",
+                                            "PRODUCT_VALUE_2",
+                                            "PRODUCT_VALUE_3", "PRODUCT_VALUE_4", "PRODUCT_VALUE_5", "PRODUCT_STATUS"]
 
 PRODUCT_danh_sach_xe_aLL = ["PRODUCT_ID", "PRODUCT_ID_NUMBER", "PRODUCT_NAME", "PRODUCT_DES", "PRODUCT_TYPE_ID",
-                      "PRODUCT_BRAND_ID",
-                      "PRODUCT_MODEL_ID", "PRODUCT_ORIGIN", "PRODUCT_RELEASE_YEAR", "PRODUCT_YEAR", "PRODUCT_SEAT",
-                      "PRODUCT_FUEL_NAME", "PRODUCT_COLOR", "PRODUCT_ODO", "PRODUCT_ENGINE", "PRODUCT_GET_DATE",
-                      "PRODUCT_SELL_DATE", "PRODUCT_VALUE_1", "PRODUCT_VALUE_2", "PRODUCT_VALUE_3", "PRODUCT_VALUE_4",
-                      "PRODUCT_VALUE_5", "PRODUCT_VALUE_6", "PRODUCT_STATUS"]
+                            "PRODUCT_BRAND_ID",
+                            "PRODUCT_MODEL_ID", "PRODUCT_ORIGIN", "PRODUCT_RELEASE_YEAR", "PRODUCT_YEAR",
+                            "PRODUCT_SEAT",
+                            "PRODUCT_FUEL_NAME", "PRODUCT_COLOR", "PRODUCT_ODO", "PRODUCT_ENGINE", "PRODUCT_GET_DATE",
+                            "PRODUCT_SELL_DATE", "PRODUCT_VALUE_1", "PRODUCT_VALUE_2", "PRODUCT_VALUE_3",
+                            "PRODUCT_VALUE_4",
+                            "PRODUCT_VALUE_5", "PRODUCT_VALUE_6", "PRODUCT_STATUS"]
 
 
 def get_max_id(TABLE_NAME):
@@ -140,7 +145,7 @@ def product_view_detail(product_id):
                         , 'PRODUCT_VALUE_5', 'PRODUCT_VALUE_6']):
                 if name in ['PRODUCT_VALUE_1', 'PRODUCT_VALUE_2', 'PRODUCT_VALUE_3', 'PRODUCT_VALUE_4'
                     , 'PRODUCT_VALUE_5', 'PRODUCT_VALUE_6']:
-                    data_row[data_name[ind_n]+'_number'] = int(getattr(row, name))
+                    data_row[data_name[ind_n] + '_number'] = int(getattr(row, name))
                     data_row[data_name[ind_n]] = "{:,} VNĐ".format(getattr(row, name))
                 else:
                     data_row[data_name[ind_n]] = getattr(row, name)
@@ -252,8 +257,10 @@ def product_add(json_add):
 def product_get_cols_small_cap_nhat_gia():
     return PRODUCT_cols_small_cap_nhat_gia
 
+
 def product_cols_small_cap_nhat_gia_no_val_6():
     return PRODUCT_cols_small_cap_nhat_gia_no_val_6
+
 
 def product_update_gia_xe(json_data):
     session_sql = SessionSql()
@@ -274,7 +281,9 @@ def product_update_gia_xe(json_data):
                     json_data_update[name] = new_name
                 else:
                     json_data_update[name] = json_data[name]
-    json_data_update['PRODUCT_VALUE_6'] = int(json_data_update['PRODUCT_VALUE_5']) - (int(json_data_update['PRODUCT_VALUE_1']) + int(json_data_update['PRODUCT_VALUE_2']) + int(json_data_update['PRODUCT_VALUE_4']))
+    json_data_update['PRODUCT_VALUE_6'] = int(json_data_update['PRODUCT_VALUE_5']) - (
+            int(json_data_update['PRODUCT_VALUE_1']) + int(json_data_update['PRODUCT_VALUE_2']) + int(
+        json_data_update['PRODUCT_VALUE_4']))
     try:
         rs = session_sql.query(PRODUCT).filter(PRODUCT.PRODUCT_ID == PRODUCT_ID).update(json_data_update)
         if rs == 1:
@@ -282,3 +291,392 @@ def product_update_gia_xe(json_data):
     except:
         pass
     session_sql.close()
+
+
+def product_add_new_short_5_para(json_data):
+    session_sql = SessionSql()
+    json_insert = {}
+    json_return = {}
+    for name in PRODUCT_cols:
+        try:
+            json_insert[name] = json_data[name]
+        except:
+            json_insert[name] = None
+
+    try:
+        json_insert["PRODUCT_ID"] = int(json_data["PRODUCT_ID"])
+        json_insert["PRODUCT_ID_NUMBER"] = str(json_data['PRODUCT_ID_NUMBER'])
+        json_insert["PRODUCT_NAME"] = str(json_data['PRODUCT_NAME'])
+        json_insert["PRODUCT_BRAND_ID"] = int(json_data['PRODUCT_BRAND_ID'])
+        json_insert["PRODUCT_BRAND_NAME"] = str(
+            session_sql.query(BRAND.BRAND_NAME).filter(BRAND.BRAND_ID == int(json_data['PRODUCT_BRAND_ID'])).first()[0])
+        json_insert["PRODUCT_MODEL_ID"] = int(json_data['PRODUCT_MODEL_ID'])
+        json_insert["PRODUCT_MODEL_NAME"] = str(session_sql.query(BRAND_MODEL.MODEL_NAME).filter(
+            BRAND_MODEL.MODEL_ID == int(json_data['PRODUCT_MODEL_ID'])).first()[0])
+        json_insert["PRODUCT_VALUE_1"] = 0
+        json_insert["PRODUCT_VALUE_2"] = 0
+        json_insert["PRODUCT_VALUE_3"] = 0
+        json_insert["PRODUCT_VALUE_4"] = 0
+        json_insert["PRODUCT_VALUE_5"] = 0
+        json_insert["PRODUCT_VALUE_6"] = 0
+        json_insert["PRODUCT_VALUE_7"] = 0
+        json_insert["PRODUCT_USING_STATUS"] = 1
+        # print("json_insert", json_insert)
+        try:
+            obj = PRODUCT(**json_insert)
+            session_sql.add(obj)
+            session_sql.commit()
+            error_code = 0
+            json_return = json_insert
+        except Exception as e:
+            print(e)
+            error_code = 1
+    except:
+        error_code = 1
+    session_sql.close()
+    return error_code, json_return
+
+
+def product_view_one(PRODUCT_ID):
+    session_sql = SessionSql()
+    rs = session_sql.query(PRODUCT).filter(PRODUCT.PRODUCT_ID == PRODUCT_ID).first()
+    data_return = {}
+    if rs is not None:
+        for name in PRODUCT_cols:
+            data_return[name] = str(getattr(rs, name))
+    session_sql.close()
+    return data_return
+
+
+# Quan Ly Xe
+def product_cap_nhat_lai(PRODUCT_ID):
+    session_sql = SessionSql()
+    rs = session_sql.query(PRODUCT).filter(PRODUCT.PRODUCT_ID == PRODUCT_ID).first()
+    gia_nhap = getattr(rs, "PRODUCT_VALUE_1")
+    chi_phi_nhap = getattr(rs, "PRODUCT_VALUE_2")
+    chi_phi_ban = getattr(rs, "PRODUCT_VALUE_4")
+    gia_ban_thuc_te = getattr(rs, "PRODUCT_VALUE_5")
+    lai_thu_duoc = int(gia_ban_thuc_te) - (int(gia_nhap) + int(chi_phi_nhap) + int(chi_phi_ban))
+    session_sql.query(PRODUCT).filter(PRODUCT.PRODUCT_ID == PRODUCT_ID).update({"PRODUCT_VALUE_6": lai_thu_duoc})
+    session_sql.commit()
+    session_sql.close()
+
+
+def product_cap_nhat_thong_tin_xe(json_data):
+    session_sql = SessionSql()
+    json_update = {}
+    try:
+        PRODUCT_ID = int(json_data['PRODUCT_ID'])
+        try:
+            BRAND_ID = int(json_data['PRODUCT_BRAND_ID'])
+            BRAND_NAME = str(session_sql.query(BRAND.BRAND_NAME).filter(BRAND.BRAND_ID == BRAND_ID).first()[0])
+            json_update['PRODUCT_BRAND_ID'] = BRAND_ID
+            json_update['PRODUCT_BRAND_NAME'] = BRAND_NAME
+        except:
+            pass
+
+        try:
+            MODEL_ID = int(json_data['PRODUCT_MODEL_ID'])
+            MODEL_NAME = str(
+                session_sql.query(BRAND_MODEL.MODEL_NAME).filter(BRAND_MODEL.MODEL_ID == MODEL_ID).first()[0])
+            json_update['PRODUCT_MODEL_ID'] = MODEL_ID
+            json_update['PRODUCT_MODEL_NAME'] = MODEL_NAME
+        except:
+            pass
+
+        try:
+            TYPE_ID = int(json_data['PRODUCT_TYPE_ID'])
+            TYPE_NAME = str(session_sql.query(TYPE.TYPE_NAME).filter(TYPE.TYPE_ID == TYPE_ID).first()[0])
+            json_update['PRODUCT_TYPE_ID'] = TYPE_ID
+            json_update['PRODUCT_TYPE_NAME'] = TYPE_NAME
+        except:
+            pass
+
+        try:
+            PRODUCT_NAME = str(json_data['PRODUCT_NAME'])
+            if PRODUCT_NAME != "":
+                json_update['PRODUCT_NAME'] = PRODUCT_NAME
+        except:
+            pass
+
+        rs = session_sql.query(PRODUCT).filter(PRODUCT.PRODUCT_ID == PRODUCT_ID).update(json_update)
+        if rs == 1:
+            print(1, json_update)
+            session_sql.commit()
+            error_code = 0
+        else:
+            print(2, json_update)
+            error_code = 1
+
+    except:
+        error_code = 1
+    session_sql.close()
+    return error_code
+
+
+def product_cap_nhat_chi_phi_nhap_va_gia_ban(json_data):
+    session_sql = SessionSql()
+    json_update = {}
+    try:
+        PRODUCT_ID = int(json_data['PRODUCT_ID'])
+
+        try:
+            PRODUCT_GET_DATE = str(json_data['PRODUCT_GET_DATE'])
+            if PRODUCT_GET_DATE != "":
+                json_update['PRODUCT_GET_DATE'] = PRODUCT_GET_DATE
+        except:
+            pass
+
+        try:
+            PRODUCT_VALUE_1 = str(json_data['PRODUCT_VALUE_1'])
+            if PRODUCT_VALUE_1 != "":
+                PRODUCT_VALUE_1 = str(PRODUCT_VALUE_1)
+                VALUE = []
+                for i in PRODUCT_VALUE_1:
+                    if i.isnumeric():
+                        VALUE.append(i)
+                NUMBER_VALUE = ''
+                NUMBER_VALUE = NUMBER_VALUE.join(VALUE)
+                json_update['PRODUCT_VALUE_1'] = NUMBER_VALUE
+        except:
+            pass
+        try:
+            PRODUCT_VALUE_1 = str(json_data['PRODUCT_VALUE_2'])
+            if PRODUCT_VALUE_1 != "":
+                PRODUCT_VALUE_1 = str(PRODUCT_VALUE_1)
+                VALUE = []
+                for i in PRODUCT_VALUE_1:
+                    if i.isnumeric():
+                        VALUE.append(i)
+                NUMBER_VALUE = ''
+                NUMBER_VALUE = NUMBER_VALUE.join(VALUE)
+                json_update['PRODUCT_VALUE_2'] = NUMBER_VALUE
+        except:
+            pass
+        try:
+            PRODUCT_VALUE_1 = str(json_data['PRODUCT_VALUE_3'])
+            if PRODUCT_VALUE_1 != "":
+                PRODUCT_VALUE_1 = str(PRODUCT_VALUE_1)
+                VALUE = []
+                for i in PRODUCT_VALUE_1:
+                    if i.isnumeric():
+                        VALUE.append(i)
+                NUMBER_VALUE = ''
+                NUMBER_VALUE = NUMBER_VALUE.join(VALUE)
+                json_update['PRODUCT_VALUE_3'] = NUMBER_VALUE
+        except:
+            pass
+
+        print(json_update)
+        rs = session_sql.query(PRODUCT).filter(PRODUCT.PRODUCT_ID == PRODUCT_ID).update(json_update)
+        if rs == 1:
+            print(1, json_update)
+            session_sql.commit()
+            product_cap_nhat_lai(PRODUCT_ID)
+            error_code = 0
+        else:
+            print(2, json_update)
+            error_code = 1
+
+    except:
+        error_code = 1
+    session_sql.close()
+    return error_code
+
+
+def product_cap_nhat_chi_phi_ban_va_gia_ban_thuc_te(json_data):
+    session_sql = SessionSql()
+    json_update = {}
+    print(json_data)
+    try:
+        PRODUCT_ID = int(json_data['PRODUCT_ID'])
+
+        try:
+            PRODUCT_GET_DATE = str(json_data['PRODUCT_SELL_DATE'])
+            if PRODUCT_GET_DATE != "":
+                json_update['PRODUCT_SELL_DATE'] = PRODUCT_GET_DATE
+        except:
+            pass
+
+        try:
+            PRODUCT_VALUE_1 = str(json_data['PRODUCT_VALUE_4'])
+            if PRODUCT_VALUE_1 != "":
+                PRODUCT_VALUE_1 = str(PRODUCT_VALUE_1)
+                VALUE = []
+                for i in PRODUCT_VALUE_1:
+                    if i.isnumeric():
+                        VALUE.append(i)
+                NUMBER_VALUE = ''
+                NUMBER_VALUE = NUMBER_VALUE.join(VALUE)
+                json_update['PRODUCT_VALUE_4'] = NUMBER_VALUE
+        except:
+            pass
+        try:
+            PRODUCT_VALUE_1 = str(json_data['PRODUCT_VALUE_5'])
+            if PRODUCT_VALUE_1 != "":
+                PRODUCT_VALUE_1 = str(PRODUCT_VALUE_1)
+                VALUE = []
+                for i in PRODUCT_VALUE_1:
+                    if i.isnumeric():
+                        VALUE.append(i)
+                NUMBER_VALUE = ''
+                NUMBER_VALUE = NUMBER_VALUE.join(VALUE)
+                json_update['PRODUCT_VALUE_5'] = NUMBER_VALUE
+        except:
+            pass
+
+        print(json_update)
+        rs = session_sql.query(PRODUCT).filter(PRODUCT.PRODUCT_ID == PRODUCT_ID).update(json_update)
+        if rs == 1:
+            print(1, json_update)
+            session_sql.commit()
+            product_cap_nhat_lai(PRODUCT_ID)
+            error_code = 0
+        else:
+            print(2, json_update)
+            error_code = 1
+
+    except:
+        error_code = 1
+    session_sql.close()
+    return error_code
+
+
+def product_cap_nhat_chi_tiet_xe_1(json_data):
+    session_sql = SessionSql()
+    json_update = {}
+    print(json_data)
+    try:
+        PRODUCT_ID = int(json_data['PRODUCT_ID'])
+
+        try:
+            VALUE = str(json_data['PRODUCT_ORIGIN'])
+            if VALUE != "":
+                json_update['PRODUCT_ORIGIN'] = VALUE
+        except:
+            pass
+
+        try:
+            VALUE = str(json_data['PRODUCT_RELEASE_YEAR'])
+            if VALUE != "":
+                json_update['PRODUCT_RELEASE_YEAR'] = VALUE
+        except:
+            pass
+
+        try:
+            VALUE = str(json_data['PRODUCT_YEAR'])
+            if VALUE != "":
+                json_update['PRODUCT_YEAR'] = VALUE
+        except:
+            pass
+
+        try:
+            VALUE = str(json_data['PRODUCT_SEAT'])
+            if VALUE != "":
+                json_update['PRODUCT_SEAT'] = VALUE
+        except:
+            pass
+
+        print(json_update)
+        rs = session_sql.query(PRODUCT).filter(PRODUCT.PRODUCT_ID == PRODUCT_ID).update(json_update)
+        if rs == 1:
+            print(1, json_update)
+            session_sql.commit()
+            error_code = 0
+        else:
+            print(2, json_update)
+            error_code = 1
+
+    except:
+        error_code = 1
+    session_sql.close()
+    return error_code
+
+def product_cap_nhat_chi_tiet_xe_2(json_data):
+    session_sql = SessionSql()
+    json_update = {}
+    print(json_data)
+    try:
+        PRODUCT_ID = int(json_data['PRODUCT_ID'])
+
+        try:
+            VALUE = str(json_data['PRODUCT_COLOR'])
+            if VALUE != "":
+                json_update['PRODUCT_COLOR'] = VALUE
+        except:
+            pass
+
+        try:
+            VALUE = str(json_data['PRODUCT_ODO'])
+            if VALUE != "":
+                json_update['PRODUCT_ODO'] = VALUE
+        except:
+            pass
+
+        try:
+            VALUE = str(json_data['PRODUCT_FUEL_NAME'])
+            if VALUE != "":
+                json_update['PRODUCT_FUEL_NAME'] = VALUE
+        except:
+            pass
+
+        try:
+            VALUE = str(json_data['PRODUCT_ENGINE'])
+            if VALUE != "":
+                json_update['PRODUCT_ENGINE'] = VALUE
+        except:
+            pass
+
+        print(json_update)
+        rs = session_sql.query(PRODUCT).filter(PRODUCT.PRODUCT_ID == PRODUCT_ID).update(json_update)
+        if rs == 1:
+            print(1, json_update)
+            session_sql.commit()
+            error_code = 0
+        else:
+            print(2, json_update)
+            error_code = 1
+
+    except:
+        error_code = 1
+    session_sql.close()
+    return error_code
+
+def product_cap_nhat_trang_thai_xe(json_data):
+    session_sql = SessionSql()
+    json_update = {}
+    print(json_data)
+    try:
+        PRODUCT_ID = int(json_data['PRODUCT_ID'])
+
+        try:
+            VALUE = str(json_data['PRODUCT_STATUS'])
+            if VALUE != "":
+                json_update['PRODUCT_STATUS'] = VALUE
+        except:
+            pass
+
+
+        rs = session_sql.query(PRODUCT).filter(PRODUCT.PRODUCT_ID == PRODUCT_ID).update(json_update)
+        if rs == 1:
+            print(1, json_update)
+            session_sql.commit()
+            error_code = 0
+        else:
+            print(2, json_update)
+            error_code = 1
+
+    except:
+        error_code = 1
+    session_sql.close()
+    return error_code
+
+
+def product_upload_hinh_anh(data):
+    # session_sql = SessionSql()
+    print(len(data))
+    # rs = session_sql.query(PRODUCT_IMAGE).filter(PRODUCT_IMAGE.PRODUCT_ID == 1).update({"PRODUCT_IMAGE_1": image_1})
+    # print(rs)
+    # session_sql.close()
+
+    return 1
