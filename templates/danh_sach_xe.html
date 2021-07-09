@@ -2,23 +2,24 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
 {#    <meta name="viewport" content="width=device-width, initial-scale=1">#}
     <title>Quản Lý Xe</title>
     <link rel="shortcut icon" href="{{ url_for('static', filename='icon/volang.png') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='fa/css/all.css') }}">
+    <style>
+        i{
+            color: #000000;
+        }
+    </style>
 </head>
 <body>
 {#<img width="20%" src="{{ url_for('static', filename='img/logo.png') }}" class="rounded mx-auto d-block" alt="Responsive image">#}
-<div class="container shadow p-3 mb-5 bg-white rounded" >
-
-    <nav class="navbar bg-dark ">
+<div class="container shadow p-1 mb-0 bg-white rounded" >
+    <nav class="navbar bg-dark clearfix">
         <div style="width: 30%"><img width="100%" class="" src="{{ url_for('static', filename='img/logo.png') }}" ></div>
-        <a class="navbar-brand" href="{{ url_for('danh_sach_xe') }}">PHẦN MỀM QUẢN LÝ XE</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-{#                <span class="navbar-toggler-icon"></span>#}
-        </button>
-
+        <a style="width: 60%; color: #cf8330" class="navbar-brand text-center" href="{{ url_for('danh_sach_xe') }}">PHẦN MỀM QUẢN LÝ XE</a>
     </nav>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href=""></a>
@@ -27,170 +28,164 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link active" href="{{ url_for('danh_sach_xe') }}">Danh sách xe <span class="sr-only">(current)</span></a>
+                <li class="nav-item active ">
+                    <a class="nav-link active font-weight-bold" href="{{ url_for('danh_sach_xe') }}">DANH SÁCH XE<span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="{{ url_for('login') }}">Logout</a>
+                    <a class="nav-link" href="{{ url_for('login') }}">Logout</a>
                 </li>
-
             </ul>
             <span class="navbar-text">
 {#                Navbar text with an inline element#}
             </span>
-  </div>
-</nav>
-    <table class="table table-striped table-hover table-bordered" id="table-danh-sach-xe">
-        <thead>
-            <tr>
-                <th style="text-align: center" scope="col">STT</th>
-                <th style="text-align: center" scope="col">Mã xe<input  class="form-control" id="search-ma-xe" onclick="clearSearchVal()" onkeyup="searchMaxe()" type="text" placeholder="Nhập mã xe ..."></th>
-                <th style="text-align: center" scope="col">Tên xe<input class="form-control" id="search-hang-xe" onclick="clearSearchVal()" onkeyup="searchHangxe()" type="text" placeholder="Nhập hãng xe.."></th>
-                <th style="text-align: center" scope="col">Hãng xe<input class="form-control" id="search-ten-xe" onclick="clearSearchVal()" onkeyup="searchTenxe()" type="text" placeholder="Nhập tên xe.."></th>
-                <th style="text-align: center" scope="col">Loại xe<input class="form-control" id="search-loai-xe" onclick="clearSearchVal()" onkeyup="searchLoaixe()" type="text" placeholder="Nhập mẫu xe.."></th>
-                <th style="text-align: center" scope="col" width="15%">
-{#                    <img width="100%" class="" src="{{ url_for('static', filename='img/logo.png') }}" >#}
-                </th>
-            </tr>
-            <tr>
-{#            <form action="{{ url_for('danh_sach_xe_add_xe') }}" method="post">#}
-            <form id="FormThemXe">
-                <th style="text-align: center" ><i class="far fa-star"></i></th>
-                <th>
-                    <input type="hidden" class="form-control" id="IDxe" name="PRODUCT_ID" value="{{ max_id }}">
-                    <input type="text" class="form-control" disabled id="MaXeDisaable">
-                    <input type="hidden" name="PRODUCT_ID_NUMBER" class="form-control" id="MaXe" >
-                </th>
-                <th><input type="text" class="form-control" name="PRODUCT_NAME" value="" id="TenXe" required></th>
-                <th>
-                    <select name="PRODUCT_BRAND_ID" class="custom-select" id="ChonHangXe" required>
-                    <option value="">Chọn thương hiệu ...</option>
-                    {% for row_brand in data_brand_model %}
-                        <option value="{{ row_brand['BRAND_ID'] }}">{{ row_brand['BRAND_NAME'] }}</option>
-                    {% endfor %}
-                    </select>
-                </th>
-                <th>
-                    <select name="PRODUCT_MODEL_ID" class="custom-select" id="ChonModelXe" required>
-                        <option value="">Chọn model xe ...</option>
-                    </select>
-                </th>
-                <th><button type="submit" id="sumbit-them-xe" class="form-control btn-secondary">Thêm</button></th>
-                </th>
-            </form>
-            </tr>
-        </thead>
-        <tbody id="tbody-danh-sach-xe">
+        </div>
+    </nav>
+    <div class="accordion mb-1" id="accordionExample">
+        <div class="card">
+            <div class="card-header list-group-item-success" id="headingOne">
+                <h2 class="mb-0">
+                    <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                        <i class="fas fa-plus">  THÊM MỚI XE</i>
+                        </button>
+                </h2>
+            </div>
+            <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                <div class="card-body">
+                    <table class="table table-striped table-hover table-bordered" >
+                        <form id="FormThemXe">
+                            <tr>
+                            <th>Mã Xe</th>
+                                <td><input type="hidden" class="form-control" id="IDxe" name="PRODUCT_ID" value="{{ max_id }}">
+                                    <input type="text" class="form-control" disabled id="MaXeDisable">
+                                    <input type="hidden" name="PRODUCT_ID_NUMBER" class="form-control" id="MaXe" ></td>
+                            </tr>
+                            <tr>
+                                <th>Hãng Xe</th>
+                                <td><select name="PRODUCT_BRAND_ID" class="custom-select" id="ChonHangXe" required>
+                                            <option value="">Thương hiệu ...</option>
+                                            {% for row_brand in data_brand_model %}
+                                                <option value="{{ row_brand['BRAND_ID'] }}">{{ row_brand['BRAND_NAME'] }}</option>
+                                            {% endfor %}
+                                            </select></td>
+                            </tr>
+                            <tr>
+                                <th>Loại Xe</th>
+                                <td><select name="PRODUCT_MODEL_ID" class="custom-select" id="ChonModelXe" required>
+                                                <option value="">Chọn Model ...</option>
+                                            </select></td>
+                            </tr>
+                            <tr>
+                                <th>Tên Xe</th>
+                                <td><input type="text" class="form-control" name="PRODUCT_NAME" value="" id="TenXe" required></td>
+                            </tr>
+                            <tr>
+                                <th>Biển số xe</th>
+                                <td><input type="text" class="form-control" name="PRODUCT_LICENSE_PLATE" value="" id="BienSoXe" placeholder="65A-123.45" required></td>
+                            </tr>
+                            <tr>
+                                <th>Giá bán</th>
+                                <td><input type="text" name="PRODUCT_VALUE_3" class="form-control" id="InputGiaTri3" value="" data-type="currency" placeholder="0,000,000" required></td>
+                            </tr>
+                            <tr>
+                                <th>Trạng thái</th>
+                                <td>
+                                    <select name="PRODUCT_STATUS" class="custom-select" id="inputGroupSelect01" required>
+                                        <option value="Mới nhập">Chọn ...</option>
+                                        <option value="Mới nhập">Mới nhập</option>
+                                        <option value="Xe đem đi dọn">Xe đem đi dọn</option>
+                                        <option value="Xe đã cọc">Xe đã cọc</option>
+                                        <option value="Xe đang ở Auto">Xe đang ở Auto</option>
+                                        <option value="Xe đã bán">Xe đã bán</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"><button type="submit" class="form-control list-group-item-success" id="sumbit-them-xe">Thêm</button></td>
+                            </tr>
+                        </form>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="input-group mb-1">
+        <div class="input-group-prepend">
+            <span class="input-group-text"><i class="fas fa-search"></i></span>
+        </div>
+        <input type="text" class="form-control" id="InputSearch" onkeyup="searchTenxe()" onclick="clearSearchVal()"
+               placeholder="Nhập Biển số xe hoặc tên xe ..." aria-describedby="inputGroupPrepend" required>
+    </div>
+    <div class="accordion" id="accordionCarShow">
         {% for row in danh_sach_xe %}
-        <tr>
-        <form action="{{ url_for('quan_ly_xe') }}" method="post">
-            <th scope="row" style="text-align: center">{{ loop.index }}</th>
-            <input type="hidden" name="PRODUCT_ID" value="{{ row.PRODUCT_ID }}">
-            <td>{{ row.PRODUCT_ID_NUMBER }}</td>
-            <td>{{ row.PRODUCT_NAME }}</td>
-            <td>{{ row.PRODUCT_BRAND_NAME }}</td>
-            <td>{{ row.PRODUCT_MODEL_NAME }}</td>
-            <td>
-                <button type="submit" class="form-control">Xem</button>
-            </td>
-        </form>
-        </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            <div class="card">
+                <div class="card-header py-2" id="heading{{ loop.index }}" >
+                    <h2 class="mb-0">
+                        <button style="width: 90%; float: left" class="btn btn-link btn-block text-left collapsed float-left " type="button" data-toggle="collapse" data-target="#collapse{{ loop.index }}" aria-expanded="false" aria-controls="collapse{{ loop.index }}">
+                            <i class="fas fa-car"> {{ row.PRODUCT_NAME }} ({{ row.PRODUCT_LICENSE_PLATE }})</i>
+                        </button>
+                        <form action="{{ url_for('quan_ly_xe') }}" method="post">
+                            <input type="hidden" name="PRODUCT_ID" value="{{ row.PRODUCT_ID }}">
+                            <button style="width: 2%" type="submit" class="btn btn-link btn-block text-left float-right text-center pb-0 pt-0"><i class="fas fa-chevron-right"></i></button>
+                        </form>
+
+                    </h2>
+                </div>
+                <div id="collapse{{ loop.index }}" class="collapse" aria-labelledby="heading{{ loop.index }}" data-parent="#accordionCarShow">
+                    <div class="card-body">
+                        <ul class="list-group">
+                            <li class="list-group-item bg-light py-2">Mã Xe: {{ row.PRODUCT_ID_NUMBER }}</li>
+                            <li class="list-group-item bg-light py-2">Tên xe: {{ row.PRODUCT_NAME }}</li>
+                            <li class="list-group-item bg-light py-2">Hãng xe: {{ row.PRODUCT_BRAND_NAME }}</li>
+                            <li class="list-group-item bg-light py-2">Loại Xe: {{ row.PRODUCT_MODEL_NAME }}</li>
+                            <li class="list-group-item bg-light py-2">Giá Bán: {{ row.PRODUCT_VALUE_3 }} VNĐ</li>
+                            <li class="list-group-item bg-light py-2">Tráng thái xe: {{ row.PRODUCT_STATUS }}</li>
+                        </ul>
+                        <form id="FormVohieuhoa">
+                            <input type="hidden" name="PRODUCT_ID" value="{{ row.PRODUCT_ID }}">
+                            <button id="ButtonVohieuhoa" style="width: 40%;" type="submit" class="form-control mt-1 float-right mb-2 py-0">Vô hiệu hóa</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+    </div>
+
 </div>
 <script>
     function reloadTable(){
-        var input, filter, table, tr, td, i, txtValue;
-        table = document.getElementById("table-danh-sach-xe");
-        tr = table.getElementsByTagName("tr");
-        for (i = 0; i < tr.length; i++) {
-            tr[i].style.display = "";
+        table = document.getElementById("accordionCarShow");
+        form = table.getElementsByTagName("form");
+        for (i = 0; i < form.length; i++) {
+            form[i].style.display = "";
         }
     }
     function clearSearchVal(){
         reloadTable()
-        $(" #search-hang-xe ").val('');
-        $(" #search-ten-xe ").val('');
-        $(" #search-loai-xe ").val('');
-        $(" #search-ma-xe ").val('');
+        $(" #InputSearch ").val('');
     }
-    function searchMaxe() {
-        {#clearOne()#}
-        var input, filter, table, tr, td, i, txtValue;
-        input = document.getElementById("search-ma-xe");
-        filter = input.value.toUpperCase();
-        table = document.getElementById("table-danh-sach-xe");
-        tr = table.getElementsByTagName("tr");
-        for (i = 0; i < tr.length; i++) {
-            td = tr[i].getElementsByTagName("td")[0];
-            if (td) {
-                txtValue = td.textContent || td.innerText;
-                if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                    tr[i].style.display = "";
-                    } else {
-                    tr[i].style.display = "none";
-                    }
-                }
-        }
-    }
-    function searchHangxe() {
-        {#clea#}
-        var input, filter, table, tr, td, i, txtValue;
-        input = document.getElementById("search-hang-xe");
-        filter = input.value.toUpperCase();
-        table = document.getElementById("table-danh-sach-xe");
-        tr = table.getElementsByTagName("tr");
-        for (i = 0; i < tr.length; i++) {
-            td = tr[i].getElementsByTagName("td")[1];
-            if (td) {
-                txtValue = td.textContent || td.innerText;
-                if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                    tr[i].style.display = "";
-                    } else {
-                    tr[i].style.display = "none";
-                    }
-                }
-        }
-    }
-    function searchTenxe() {
-        var input, filter, table, tr, td, i, txtValue;
-        input = document.getElementById("search-ten-xe");
-        filter = input.value.toUpperCase();
-        table = document.getElementById("table-danh-sach-xe");
-        tr = table.getElementsByTagName("tr");
-        for (i = 0; i < tr.length; i++) {
-            td = tr[i].getElementsByTagName("td")[2];
-            if (td) {
-                txtValue = td.textContent || td.innerText;
-                if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                    tr[i].style.display = "";
-                    } else {
-                    tr[i].style.display = "none";
-                    }
-                }
-        }
-    }
-    function searchLoaixe() {
-        var input, filter, table, tr, td, i, txtValue;
-        input = document.getElementById("search-loai-xe");
-        filter = input.value.toUpperCase();
-        table = document.getElementById("table-danh-sach-xe");
-        tr = table.getElementsByTagName("tr");
-        for (i = 0; i < tr.length; i++) {
-            td = tr[i].getElementsByTagName("td")[3];
-            console.log(tr[i])
 
-            if (td) {
-                txtValue = td.textContent || td.innerText;
+
+    function searchTenxe() {
+        {#var input, filter, table, tr, td, i, txtValue;#}
+        input = document.getElementById("InputSearch");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("accordionCarShow");
+        form = table.getElementsByTagName("form");
+        for (i = 0; i < form.length; i++) {
+            div = form[i].getElementsByTagName("div")[0];
+            itxt = div.getElementsByTagName("i")[0];
+            {#divChild = div.getElementsByTagName("div")[0];#}
+            if (itxt) {
+                txtValue = itxt.textContent || itxt.innerText;
                 if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                    tr[i].style.display = "";
-                    } else {
-                    tr[i].style.display = "none";
-                    }
+                    form[i].style.display = "";
+                } else {
+                    form[i].style.display = "none";
                 }
+            }
         }
     }
+
 </script>
 {#<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>#}
 {#<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>#}
@@ -207,7 +202,7 @@
         let obj = JSON.parse('{{ data_brand_model_json | safe  }}');
         let options = obj.filter(e => e.BRAND_ID == brandId)[0].MODEL;
         {#console.log(options,brandId)#}
-        console.log(options);
+        {#console.log(options);#}
         options.forEach(option => {
             $( "#ChonModelXe" ).append(`<option value=${option.MODEL_ID}>${option.MODEL_NAME}</option>`)
         });
@@ -223,7 +218,7 @@
     add_ma_xe.push($( "#ChonModelXe option:selected" ).text().toUpperCase());
     add_ma_xe.push("-")
     add_ma_xe.push($( "#IDxe" ).val());
-    $( "#MaXeDisaable" ).val(add_ma_xe.join('').replace(' ',''));
+    $( "#MaXeDisable" ).val(add_ma_xe.join('').replace(' ',''));
     $( "#MaXe" ).val(add_ma_xe.join('').replace(' ',''));
      {#$( "#ma-xe-trim" ).val($( "#ma-xe-trim" ).val().split(' ').map(e => e.trim()).join(''));#}
     });
@@ -235,7 +230,7 @@
         $.map(unindexed_array, function(n, i){
             indexed_array[n['name']] = n['value'];
         });
-
+        console.log(indexed_array)
         return indexed_array;
     }
 
@@ -246,16 +241,104 @@
              data: {"data": JSON.stringify(getFormData($("#FormThemXe")))},
              type : 'POST',
              success: function (response){
-                 console.log(response)
                  {#console.log(JSON.parse(response))#}
                  location.reload()
              },
              error: function (error){
-                 console.log(error);
              }
          });
      });
 
+    $( "#ButtonVohieuhoa" ).click((e) =>{
+        e.preventDefault()
+         $.ajax({
+             url : '{{ url_for('danh_sach_xe_vo_hieu_hoa') }}',
+             data: {"data": JSON.stringify(getFormData($("#FormVohieuhoa")))},
+             type : 'POST',
+             success: function (response){
+                 {#console.log(JSON.parse(response))#}
+                 location.reload()
+             },
+             error: function (error){
+                 location.reload()
+
+             }
+         });
+     });
+
+    $("input[data-type='currency']").on({
+        keyup: function() {
+          formatCurrency($(this));
+        }
+    });
+
+    function formatNumber(n) {
+      // format number 1000000 to 1,234,567
+      return n.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+    }
+
+    function formatCurrency(input, blur) {
+      // appends $ to value, validates decimal side
+      // and puts cursor back in right position.
+
+      // get input value
+      var input_val = input.val();
+
+      // don't validate empty input
+      if (input_val === "") { return; }
+
+      // original length
+      var original_len = input_val.length;
+
+      // initial caret position
+      var caret_pos = input.prop("selectionStart");
+
+      // check for decimal
+      if (input_val.indexOf(".") >= 0) {
+
+        // get position of first decimal
+        // this prevents multiple decimals from
+        // being entered
+        var decimal_pos = input_val.indexOf(".");
+
+        // split number by decimal point
+        var left_side = input_val.substring(0, decimal_pos);
+        var right_side = input_val.substring(decimal_pos);
+
+        // add commas to left side of number
+        left_side = formatNumber(left_side);
+
+        // validate right side
+        right_side = formatNumber(right_side);
+
+        // On blur make sure 2 numbers after decimal
+        if (blur === "blur") {
+          right_side += "00";
+        }
+
+        // Limit decimal to only 2 digits
+        right_side = right_side.substring(0, 2);
+
+        // join number by .
+        input_val = "$" + left_side + "." + right_side;
+
+      } else {
+        // no decimal entered
+        // add commas to number
+        // remove all non-digits
+        input_val = formatNumber(input_val);
+        // final formatting
+
+      }
+
+      // send updated string to input
+      input.val(input_val);
+
+      // put caret back in the right position
+      var updated_len = input_val.length;
+      caret_pos = updated_len - original_len + caret_pos;
+      input[0].setSelectionRange(caret_pos, caret_pos);
+    }
 </script>
 </body>
 </html>

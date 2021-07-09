@@ -183,16 +183,25 @@ def get_max_id(TABLE_NAME):
 #         pass
 
 
-def user_login(user_name, user_password):
+def user_login(data):
     session_sql = SessionSql()
-    password = bytes(str(user_password), "utf-8")
+    print(data)
+    print(type(data))
     try:
-        rs_login = session_sql.query(USER).\
-            filter(USER.USER_NAME == user_name, USER.USER_PASSWORD == cast(password,VARBINARY(100))).first()
-        if rs_login is not None:
-            error_code =  0
-        else:
+        user_name = data['USER_NAME']
+        user_password = data['PASSWORD']
+        password = bytes(str(user_password), "utf-8")
+        print(user_name, password)
+        try:
+            rs_login = session_sql.query(USER).\
+                filter(USER.USER_NAME == user_name, USER.USER_PASSWORD == cast(password,VARBINARY(100))).first()
+            if rs_login is not None:
+                error_code = 0
+            else:
+                error_code = 1
+        except:
             error_code = 1
     except:
         error_code = 1
+    session_sql.close()
     return error_code

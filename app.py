@@ -14,11 +14,13 @@ def login():
 
 @app.route('/user_login', methods=['POST'])
 def user_login():
-    rs = data_user.user_login(request.form['USER_NAME'], request.form['PASSWORD'])
+    print(request.form['data'])
+    rs = data_user.user_login(json.loads(request.form['data']))
+    print(rs)
     if rs == 0:
         return danh_sach_xe()
     else:
-        return login()
+        return {}, 400, {'ContentType':'application/json'}
 
 @app.route('/danh_sach_xe')
 def danh_sach_xe():
@@ -54,26 +56,25 @@ def quan_ly_xe():
     return render_template('quan_ly_xe.html', data_xe=data_xe, PRODUCT_ID = PRODUCT_ID, data_type = data_type, data_brand_model = data_brand_model, data_brand_model_json = data_brand_model_json, data_color=data_color)
 
 
-@app.route('/quan_ly_xe_cap_nhat_thong_tin_xe', methods=['POST'])
-def quan_ly_xe_cap_nhat_thong_tin_xe():
+@app.route('/quan_ly_xe_cap_nhat_all', methods=['POST'])
+def quan_ly_xe_cap_nhat_all():
     json_data = request.form['data']
     json_data_dict = json.loads(json_data)
-    error_code = data_product.product_cap_nhat_thong_tin_xe(json_data_dict)
-
+    error_code = data_product.product_update_all(json_data_dict)
     if error_code == 0:
         return json.dumps({"error_code": error_code}), 200, {'ContentType': 'application/json'}
     else:
         return {}, 400, {'ContentType': 'application/json'}
 
-@app.route('/quan_ly_xe_cap_nhat_chi_phi_nhap_va_gia_ban', methods=['POST'])
-def quan_ly_xe_cap_nhat_chi_phi_nhap_va_gia_ban():
-    json_data = request.form['data']
-    json_data_dict = json.loads(json_data)
-    error_code = data_product.product_cap_nhat_chi_phi_nhap_va_gia_ban(json_data_dict)
-    if error_code == 0:
-        return json.dumps({"error_code": error_code}), 200, {'ContentType': 'application/json'}
-    else:
-        return {}, 400, {'ContentType': 'application/json'}
+# @app.route('/quan_ly_xe_cap_nhat_chi_phi_nhap_va_gia_ban', methods=['POST'])
+# def quan_ly_xe_cap_nhat_chi_phi_nhap_va_gia_ban():
+#     json_data = request.form['data']
+#     json_data_dict = json.loads(json_data)
+#     error_code = data_product.product_cap_nhat_chi_phi_nhap_va_gia_ban(json_data_dict)
+#     if error_code == 0:
+#         return json.dumps({"error_code": error_code}), 200, {'ContentType': 'application/json'}
+#     else:
+#         return {}, 400, {'ContentType': 'application/json'}
 
 @app.route('/quan_ly_xe_cap_nhat_chi_phi_ban_va_gia_ban_thuc_te', methods=['POST'])
 def quan_ly_xe_cap_nhat_chi_phi_ban_va_gia_ban_thuc_te():
@@ -126,8 +127,14 @@ def quan_ly_xe_upload_hinh_anh():
     else:
         return {}, 400, {'ContentType': 'application/json'}
 
-
-
+@app.route('/danh_sach_xe_vo_hieu_hoa', methods=['POST'])
+def danh_sach_xe_vo_hieu_hoa():
+    json_data = request.form['data']
+    error_code = data_product.product_deactive(json.loads(json_data))
+    if error_code == 0:
+        return json.dumps({"error_code": error_code}), 200, {'ContentType': 'application/json'}
+    else:
+        return {}, 400, {'ContentType': 'application/json'}
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=7878, debug=True)

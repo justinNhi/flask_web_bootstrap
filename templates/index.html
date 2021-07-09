@@ -1,23 +1,16 @@
 <!doctype html>
-<html lang="en">
-  <head>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
     <meta charset="utf-8">
-          <link rel="shortcut icon" href="{{ url_for('static', filename='icon/volang.png') }}">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='icon/volang.png') }}">
     <title> Dũng Lâm Auto Car - Phần mềm Quản Lý Xe</title>
-
-{#    <link rel="canonical" href="https://getbootstrap.com/docs/4.6/examples/sign-in/">#}
-
-    
-
     <!-- Bootstrap core CSS -->
     <link rel="shortcut icon" href="{{ url_for('static', filename='icon/volang.png') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='fa/css/all.css') }}">
-
-
     <style>
-      .bd-placeholder-img {
+        .bd-placeholder-img {
         font-size: 1.125rem;
         text-anchor: middle;
         -webkit-user-select: none;
@@ -25,38 +18,57 @@
         -ms-user-select: none;
         user-select: none;
       }
-
-      @media (min-width: 768px) {
+        @media (min-width: 768px) {
         .bd-placeholder-img-lg {
           font-size: 3.5rem;
         }
       }
     </style>
-
-    
     <!-- Custom styles for this template -->
     <link href="{{ url_for('static', filename='css/signin.css')}}" rel="stylesheet">
-  </head>
-  <body class="text-center">
-    
-<form action="{{ url_for("user_login") }}" method="post" class="form-signin">
-{#  <img class="mb-4" src="../assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">#}
-  <h1 class="h3 mb-3 font-weight-normal">Phần Mềm Quản Lý Xe</h1>
-  <label for="inputEmail" class="sr-only">User Name</label>
-  <input type="text" id="inputEmail" class="form-control" placeholder="Username" name="USER_NAME" required autofocus>
-  <label for="inputPassword" class="sr-only">Password</label>
-  <input type="password" id="inputPassword" class="form-control" placeholder="Password" name="PASSWORD" required>
-    <br>
-{#  <div class="checkbox mb-3">#}
-{#    <label>#}
-{#      <input type="checkbox" value="remember-me"> Remember me#}
-{#    </label>#}
-{#  </div>#}
-  <button class="btn btn-lg btn-primary btn-block" type="submit">Đăng Nhập</button>
-  <p class="mt-5 mb-3 text-muted">&copy; Admin Contact: 0977.874.755</p>
-</form>
+</head>
+<body class="text-center">
+    <form id="FormLogin" class="form-signin">
+        <h1 class="h3 mb-3 font-weight-normal">Phần Mềm Quản Lý Xe</h1>
+        <label for="inputEmail" class="sr-only">User Name</label>
+        <input type="text" id="inputEmail" class="form-control" placeholder="Username" name="USER_NAME" required autofocus>
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" id="inputPassword" class="form-control" placeholder="Password" name="PASSWORD" required>
+        <br>
+      <button id="ButtonLogin" class="btn btn-lg btn-primary btn-block" type="submit">Đăng Nhập</button>
+      <p class="mt-5 mb-3 text-muted">&copy; Admin Contact: 0977.874.755</p>
+    </form>
 
 
-    
-  </body>
+    <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+    <script>
+        function getFormData($form){
+        var unindexed_array = $form.serializeArray();
+        var indexed_array = {};
+
+        $.map(unindexed_array, function(n, i){
+            indexed_array[n['name']] = n['value'];
+        });
+        return indexed_array;
+        }
+
+        $( "#ButtonLogin" ).click((e) =>{
+            e.preventDefault()
+             $.ajax({
+                 url : '{{ url_for('user_login') }}',
+                 data: {"data": JSON.stringify(getFormData($("#FormLogin")))},
+                 type : 'POST',
+                 success: function (response){
+                     window.location.replace('/danh_sach_xe');
+
+                 },
+                 error: function (error){
+                     {#console.log()#}
+                 }
+             });
+         });
+    </script>
+</body>
 </html>

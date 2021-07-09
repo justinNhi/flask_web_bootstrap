@@ -19,7 +19,7 @@ PRODUCT = Base.classes.PRODUCT
 PRODUCT_cols = PRODUCT.__table__.columns.keys()
 PRODUCT_cols_small = ["PRODUCT_ID", "PRODUCT_ID_NUMBER", "PRODUCT_NAME", "PRODUCT_DES", "PRODUCT_TYPE_ID",
                       "PRODUCT_BRAND_ID",
-                      "PRODUCT_MODEL_ID", "PRODUCT_ORIGIN", "PRODUCT_RELEASE_YEAR", "PRODUCT_YEAR", "PRODUCT_SEAT",
+                      "PRODUCT_MODEL_ID", "PRODUCT_ORIGIN", "PRODUCT_RELEASE_YEAR", "PRODUCT_REGISTRY_DATE", "PRODUCT_SEAT",
                       "PRODUCT_FUEL_NAME", "PRODUCT_COLOR", "PRODUCT_ODO", "PRODUCT_ENGINE", "PRODUCT_GET_DATE",
                       "PRODUCT_SELL_DATE", "PRODUCT_VALUE_1", "PRODUCT_VALUE_2", "PRODUCT_VALUE_3", "PRODUCT_VALUE_4",
                       "PRODUCT_VALUE_5", "PRODUCT_VALUE_6", "PRODUCT_STATUS"]
@@ -31,8 +31,8 @@ PRODUCT_cols_small_cap_nhat_gia_no_val_6 = ["PRODUCT_ID", "PRODUCT_NAME", "PRODU
                                             "PRODUCT_VALUE_2",
                                             "PRODUCT_VALUE_3", "PRODUCT_VALUE_4", "PRODUCT_VALUE_5", "PRODUCT_STATUS"]
 
-PRODUCT_danh_sach_xe_all = ["PRODUCT_ID", "PRODUCT_ID_NUMBER", "PRODUCT_NAME", "PRODUCT_MODEL_NAME",
-                            "PRODUCT_BRAND_ID", "PRODUCT_BRAND_NAME", "PRODUCT_GET_DATE", "PRODUCT_TYPE_NAME",
+PRODUCT_danh_sach_xe_all = ["PRODUCT_ID", "PRODUCT_ID_NUMBER", "PRODUCT_NAME", "PRODUCT_MODEL_NAME", "PRODUCT_VALUE_3",
+                            "PRODUCT_BRAND_ID", "PRODUCT_BRAND_NAME", "PRODUCT_GET_DATE","PRODUCT_LICENSE_PLATE", "PRODUCT_TYPE_NAME",
                             "PRODUCT_STATUS"]
 
 
@@ -59,6 +59,9 @@ def product_danh_sach_xe():
                 if name == "PRODUCT_GET_DATE":
                     str_date = str(getattr(row, name)).split('-')
                     data_row[name] = str_date[2] + '/' + str_date[1] + '/' +str_date[0]
+                elif name == "PRODUCT_VALUE_3":
+                    data_row[name] = "{:,}".format(getattr(row, name))
+
                 else:
                     data_row[name] = str(getattr(row, name))
             except:
