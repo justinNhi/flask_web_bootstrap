@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+{#    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">#}
+    <title>AutoCar Dũng Lâm - Bảng Báo Giá</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='icon/volang.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='fa/css/all.css') }}">
+    <style>
+        i{
+            color: #000000;
+        }
+        .fa-facebook {
+  background: #3B5998;
+  color: white;
+}
+    </style>
+</head>
+<body>
+{#<img width="20%" src="{{ url_for('static', filename='img/logo.png') }}" class="rounded mx-auto d-block" alt="Responsive image">#}
+<div class="container shadow p-1 mb-0 bg-white rounded" >
+    <nav class="navbar bg-danger clearfix sm">
+        <div style="width: 25%">
+            <img width="100%" class="bg-dark" src="{{ url_for('static', filename='img/logo.png') }}">
+        </div>
+
+        <a style="width: 65%" class="navbar-brand text-center" href="https://www.facebook.com/linh.duy.794">
+            <h3 style=" width: 100%; color: white">AUTOCAR Dũng Lâm</h3>
+            <h5 style="color: yellow">CHUYÊN BUÔN BÁN VÀ TRAO ĐỔI CÁC LOẠI XE ÔTÔ</h5>
+            <h5 style="color: white">XÃ VỊ THẮNG, HUYỆN VỊ THỦY, TỈNH HẬU GIANG</h5>
+            <h6 style="color: white">MR. Trần Duy Linh 0939 571 157</h6>
+            <h6 style="color: white">ZALO: 0939 571 387 -  Hoặc quét mã QR</h6>
+            <h7><i class="fab fa-facebook-f">facebook.com/linh.duy.794</i>   </h7>
+            <h7><img width="10%" class="bg-dark" src="{{ url_for('static', filename='icon/qrcode.jpg') }}"></h7>
+
+
+        </a>
+    </nav>
+
+        <nav class="navbar bg-danger clearfix sm">
+    </nav>
+    <table class="table table-striped table-dark table-bordered">
+            <thead>
+            <tr>
+                <th>STT</th>
+                <th>Tên xe</th>
+                <th>Biển số xe</th>
+                <th>Hãng xe</th>
+                <th>Loại xe</th>
+                <th>Odo</th>
+                <th>Giá bán</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for row in danh_sach_xe %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ row.PRODUCT_NAME }}</td>
+                    <td>{{ row.PRODUCT_LICENSE_PLATE}}</td>
+                    <td>{{ row.PRODUCT_BRAND_NAME }}</td>
+                    <td>{{ row.PRODUCT_MODEL_NAME }}</td>
+                    <td>{{ row.PRODUCT_ODO }} km</td>
+                    <td>{{ row.PRODUCT_VALUE_3 }} vnđ</td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+</div>
+<script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+<script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
+</body>
+</html>

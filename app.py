@@ -1,12 +1,17 @@
 import json
-
+from datetime import date
 import flask
-from flask import Flask, render_template, request
-
+from flask import Flask, render_template, request, make_response
+import pdfkit
 app = Flask(__name__)
 import data_product
 import quan_ly_danh_sach_xe
 import data_user
+
+# from OpenSSL import SSL
+# context = SSL.Context(SSL.PROTOCOL_TLSv1_2)
+# context.use_privatekey_file('server.key')
+# context.use_certificate_file('server.crt')
 
 @app.route('/')
 def login():
@@ -117,7 +122,6 @@ def quan_ly_xe_cap_nhat_trang_thai_xe():
     else:
         return {}, 400, {'ContentType': 'application/json'}
 
-
 @app.route('/quan_ly_xe_upload_hinh_anh', methods=['POST'])
 def quan_ly_xe_upload_hinh_anh():
     json_data = request.form['data']
@@ -136,5 +140,41 @@ def danh_sach_xe_vo_hieu_hoa():
     else:
         return {}, 400, {'ContentType': 'application/json'}
 
+
+#DASHBOARD
+
+@app.route('/dashboard')
+def dashboard():
+    return render_template('dashboard.html')
+
+# @app.route('/bang_bao_gia')
+# @app.route('/pdf_bang_bao_gia', methods=['POST'])
+# def pdf_bang_bao_gia():
+#     danh_sach_xe = quan_ly_danh_sach_xe.product_pdf_danh_sach_xe()
+#
+#     return render_template('pdf_bang_bao_gia.html', danh_sach_xe=danh_sach_xe)
+
+
+@app.route('/autocar_dunglam_bang_bao_gia')
+def autocar_dunglam_bang_bao_gia():
+    danh_sach_xe = quan_ly_danh_sach_xe.product_pdf_danh_sach_xe()
+    return render_template('pdf_bang_bao_gia.html', danh_sach_xe=danh_sach_xe)
+
+
+
+@app.route('/pdf_bang_bao_gia', methods=['POST'])
+def pdf_bang_bao_gia():
+    danh_sach_xe = quan_ly_danh_sach_xe.product_pdf_danh_sach_xe()
+    render = render_template('pdf_bang_bao_gia.html', danh_sach_xe=danh_sach_xe)
+    config = pdfkit.configuration(wkhtmltopdf="C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe")
+    pdf = pdfkit.from_string(render, False, configuration=config)
+    get_today= date.today().strftime('%d/%m/%Y')
+    response = make_response(pdf)
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Dispositon'] = 'attachment; filename=Autocar_dunglam_bang_bao_gia_ngay' +str(get_today) +'.pdf'
+    print(type(response))
+    return response
+
 if __name__ == '__main__':
+    # app.run(host="0.0.0.0", port=7878, debug=True, ssl_context='adhoc')
     app.run(host="0.0.0.0", port=7878, debug=True)

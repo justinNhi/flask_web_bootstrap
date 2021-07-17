@@ -34,6 +34,11 @@ PRODUCT_cols_small_cap_nhat_gia_no_val_6 = ["PRODUCT_ID", "PRODUCT_NAME", "PRODU
 PRODUCT_danh_sach_xe_all = ["PRODUCT_ID", "PRODUCT_ID_NUMBER", "PRODUCT_NAME", "PRODUCT_MODEL_NAME", "PRODUCT_VALUE_3",
                             "PRODUCT_BRAND_ID", "PRODUCT_BRAND_NAME", "PRODUCT_GET_DATE","PRODUCT_LICENSE_PLATE", "PRODUCT_TYPE_NAME",
                             "PRODUCT_STATUS"]
+PRODUCT_danh_sach_xe_pdf = ["PRODUCT_ID", "PRODUCT_ID_NUMBER", "PRODUCT_NAME", "PRODUCT_MODEL_NAME",
+                            "PRODUCT_VALUE_3", "PRODUCT_ODO",
+                            "PRODUCT_BRAND_ID","PRODUCT_BRAND_NAME", "PRODUCT_BRAND_NAME", "PRODUCT_GET_DATE",
+                            "PRODUCT_LICENSE_PLATE", "PRODUCT_TYPE_NAME",
+                            "PRODUCT_STATUS"]
 
 
 def get_max_id(TABLE_NAME):
@@ -66,6 +71,30 @@ def product_danh_sach_xe():
                     data_row[name] = str(getattr(row, name))
             except:
                 data_row[name] = ""
+        data.append(data_row)
+    session_sql.close()
+    return data
+
+def product_pdf_danh_sach_xe():
+    session_sql = SessionSql()
+    rs_product_view = session_sql.query(PRODUCT).filter(PRODUCT.PRODUCT_USING_STATUS == 1,
+                                                        PRODUCT.PRODUCT_STATUS != "Đã bán")
+    data = []
+    for row in rs_product_view.all():
+        data_row = {}
+        for name in PRODUCT_danh_sach_xe_pdf:
+            try:
+                if name == "PRODUCT_GET_DATE":
+                    str_date = str(getattr(row, name)).split('-')
+                    data_row[name] = str_date[2] + '/' + str_date[1] + '/' +str_date[0]
+                elif name == "PRODUCT_VALUE_3" or name == "PRODUCT_ODO":
+                    data_row[name] = "{:,}".format(getattr(row, name))
+
+                else:
+                    data_row[name] = str(getattr(row, name))
+            except:
+                data_row[name] = ""
+            # print(data_row)
         data.append(data_row)
     session_sql.close()
     return data
